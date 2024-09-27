@@ -1,3 +1,9 @@
-Koncept notes Web App.odt
+./Koncept notes Web App.odt
 .env
-./node_modules/
+node_modules
+node_modules/node_modules/
+
+
+.env
+node_modules
+node_modules/node_modules/
