@@ -9,6 +9,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.post('/notes', (req, res) => {
+	const cookie = cookie;
 	const userId = req.body.userID;
 	const noteContent = req.body.notetext;
 
