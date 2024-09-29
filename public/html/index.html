@@ -3,16 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <title>Note Web Application v.1</title>
     <link rel="stylesheet" href="/css/styles.css" />
-</head>
-<body class="w-screen h-hdvh">
-    <header class="w-dvw ">
-        <img class="h-1/4 w-screen " alt="" src="../images/fountain-pen-1851096_1920.jpg">
-    </header>
-    <div class="w-screen h-screen bg-yellow-200">
-        <h6>test</h6>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
 
+        }
+    </style>
+</head>
+<body class="w-screen h-hdvh bg-cyan-100/75 flex flex-col items-center justify-center font-roboto">
+    <header class="w-full h-fit flex flex-col items-center justify-center">
+        <img class=" h-60 w-3/4 rounded-lg" alt="pióro i notes" src="../images/fountain-pen-1851096_1920.jpg">
+        <nav class="w-full h-fit flex flex-row items-center justify-center ">
+            <ul class=" w-3/4 h-fit flex flex-row items-center justify-around border-2 border-stone-950 rounded-lg font-roboto bg-[#9abdcd]">
+                <li>Strona główna</li>
+                <li>O projekcie</li>
+                <li>Wyloguj</li>
+            </ul>
+        </nav>
+    </header>
+    <div class="w-3/4 h-screen flex flex-row justify-center main_container m-0 p-0">
+        <div class=" h-full w-3/4 border-2 border-stone-950 flex flex-col rounded-tl-lg justify-start align-start  bg-[#dcecf5]">
+            <h2 class="w-full h-fit flex flex-row justify-center text-lg font-semibold">Twoje notatki:</h2>
+            <div class="w-fit h-1/4 flex flex-col justify-start align-center border-2 border-dotted border-stone-950 pt-2 pl-5 pr-5 pb-10 ml-10">
+                <h3 class="font-roboto">Dodaj notatkę</h3>
+                <img class="mt-5" src="../images/plus-sign.png" alt="">
+            </div>
+            <div class="w-full h-fit flex flex-row justify-start align-center">
+                <div class="h-fit w-1/4 flex flex-col justify-start align-center bg-[#ffffa2] pl-15 pt-2 pb-10 ml-10 mt-10 shadow-zinc-400 shadow-lg">
+                    <h2 class="w-full h-fit font-shantell flex flex-row justify-center">Tytuł notatki</h2>
+                    <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm">ID 205080</h4>
+                    <p class="w-full h-full font-shantell text-2xl ml-2">Testowa nowa notatka żółta</p>
+                </div>
+                <div class="h-fit w-1/4 flex flex-col justify-start align-center bg-[#ff7ecd] pl-15 pt-2 pb-10 ml-10 mt-10 shadow-zinc-400 shadow-lg">
+                    <h2 class="w-full h-fit font-shantell flex flex-row justify-center">Tytuł notatki</h2>
+                    <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm">ID 784512</h4>
+                    <p class="w-full h-full font-shantell text-2xl ml-2">Testowa nowa notatka różowa</p>
+                </div>
+            </div>
+        </div>
+        <div class="w-3/12 h-full border-2 border-stone-950 rounded-tr-lg flex flex-col align-center bg-[#dcecf5]">
+            <h2 class="w-full h-fit flex flex-row justify-center underline decoration-solid text-lg font-semibold ">Twój profil:</h2>
+        </div>
+    </div>
+    <div class="w-3/4 h-fit border-2 border-stone-950 flex flex-row justify-center rounded-bl-lg rounded-br-lg footer_container bg-[#9abdcd]">
+        <h2 class="h-fit w-fit font-roboto font-medium pb-2 pt-2">Copyrigth@Mateusz Śliwowski - mateo2314</h2>
     </div>
     <script src="/scripts/script.js"></script>
 </body>

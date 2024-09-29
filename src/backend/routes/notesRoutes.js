@@ -8,27 +8,27 @@ const generatePDF = require('../controllers/generatePDF');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.post('/notes', (req, res) => {
-	const cookie = cookie;
-	const userId = req.body.userID;
+router.post('/', (req, res) => {
+	const userId = req.body.userId;
 	const noteContent = req.body.notetext;
+	const date = req.body.date;
 
 	if (!userId || !noteContent || noteContent.trim() === '') {
 		return res.status(400).send('Prześlij poprawne dane!');
 	}
 
-	const sqlQuery = 'INSERT INTO notes (user_id, note) VALUES(?,?)';
+	const sqlQuery = 'INSERT INTO notes (user_id, note, date) VALUES(?,?,?)';
 
-	connection.query(sqlQuery, [userId, noteContent], (err, result) => {
+	connection.query(sqlQuery, [userId, noteContent, date], (err, result) => {
 		if (err) {
 			console.error('Błąd podczas dodawania notatki:', err);
-			return res.status(500).send('Błąd serwera:', err.message);
+			return res.status(500).send(`Błąd serwera: ${err.message}`);
 		}
 		res.status(201).send('Notatka dodana pomyślnie!');
 	});
 });
 
-router.get('/notes', (req, res) => {
+router.get('/', (req, res) => {
 	const userId = req.body.userId;
 	const noteId = req.body.noteId;
 
@@ -50,14 +50,14 @@ router.get('/notes', (req, res) => {
 		const note = result[0];
 		res.status(200).json({
 			id: noteId,
-			userId: note.user.id,
+			userId: note.user_id,
 			note: note.note.toString('utf-8'),
-			addedAt: note.addedAt,
+			date: note.date,
 		});
 	});
 });
 
-router.delete('/notes', (req, res) => {
+router.delete('/', (req, res) => {
 	const userId = req.body.userId;
 	const noteId = req.body.noteId;
 
@@ -65,7 +65,7 @@ router.delete('/notes', (req, res) => {
 		return res.status(400).send('Dane niepoprawne');
 	}
 
-	const sqlQuery = `DELETE FROM notes WHERE noteId=? AND userID=?`;
+	const sqlQuery = `DELETE FROM notes WHERE id=? AND user_id=?`;
 
 	connection.query(sqlQuery, [noteId, userId], (err, result) => {
 		if (err) {
@@ -76,9 +76,9 @@ router.delete('/notes', (req, res) => {
 	});
 });
 
-router.put('/notes', (req, res) => {
+router.put('/', (req, res) => {
 	const noteId = req.body.noteId;
-	const noteContent = req.body.noteText;
+	const noteContent = req.body.notetext;
 
 	if (!noteId || !noteContent || noteContent.trim() === '') {
 		return res.status(400).send('Niepoprawne dane');
