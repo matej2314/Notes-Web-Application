@@ -4,22 +4,25 @@ const path = require('path');
 const connection = require('../db');
 const bodyParser = require('body-parser');
 const generatePDF = require('../controllers/generatePDF');
+const verifyJWT = require('../controllers/verifyJWT');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.post('/', (req, res) => {
+	const id = req.body.noteId;
 	const userId = req.body.userId;
+	const noteTitle = req.body.notetitle;
 	const noteContent = req.body.notetext;
 	const date = req.body.date;
 
-	if (!userId || !noteContent || noteContent.trim() === '') {
+	if (!userId || !noteContent || !noteTitle || !date || noteContent.trim() === '') {
 		return res.status(400).send('Prześlij poprawne dane!');
 	}
 
-	const sqlQuery = 'INSERT INTO notes (user_id, note, date) VALUES(?,?,?)';
+	const sqlQuery = 'INSERT INTO notes (id,user_id, title, note, date) VALUES(?,?,?,?,?)';
 
-	connection.query(sqlQuery, [userId, noteContent, date], (err, result) => {
+	connection.query(sqlQuery, [id, userId, noteTitle, noteContent, date], (err, result) => {
 		if (err) {
 			console.error('Błąd podczas dodawania notatki:', err);
 			return res.status(500).send(`Błąd serwera: ${err.message}`);
@@ -49,9 +52,10 @@ router.get('/', (req, res) => {
 
 		const note = result[0];
 		res.status(200).json({
-			id: noteId,
+			id: note.id,
 			userId: note.user_id,
-			note: note.note.toString('utf-8'),
+			noteTitle: note.title,
+			noteText: note.note,
 			date: note.date,
 		});
 	});
@@ -78,15 +82,17 @@ router.delete('/', (req, res) => {
 
 router.put('/', (req, res) => {
 	const noteId = req.body.noteId;
+	const noteTitle = req.body.notetitle;
 	const noteContent = req.body.notetext;
+	const userId = req.body.userId;
 
 	if (!noteId || !noteContent || noteContent.trim() === '') {
 		return res.status(400).send('Niepoprawne dane');
 	}
 
-	const sqlQuery = 'UPDATE notes SET note=? WHERE id=?';
+	const sqlQuery = 'UPDATE notes SET title=?, note=? WHERE id=? AND user_id=?';
 
-	connection.query(sqlQuery, [noteContent, noteId], (err, result) => {
+	connection.query(sqlQuery, [noteTitle, noteContent, noteId, userId], (err, result) => {
 		if (err) {
 			console.error('Błąd podczas aktualizacji notatki', err.message);
 			return res.status(500).send('Błąd serwera');
