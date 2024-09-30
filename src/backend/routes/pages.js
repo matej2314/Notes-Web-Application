@@ -19,6 +19,4 @@ router.get('/main', (req, res) => {
 	res.sendFile(path.join(__dirname, '../../../public/html', 'main_page.html'));
 });
 
-// router.get('/generate-pdf', generatePDF);
-
 module.exports = router;

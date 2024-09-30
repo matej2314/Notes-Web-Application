@@ -22,6 +22,8 @@ app.use('/notes', notesRoutes);
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 
+// app.get('/generate-pdf', generatePDF);
+
 // Uruchomienie serwera
 app.listen(port, () => {
 	console.log(`SERVER LISTENING ON PORT ${port}`);

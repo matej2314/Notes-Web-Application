@@ -20,23 +20,19 @@ exports.registerUser = async (req, res) => {
 		const { reg_username, reg_email, reg_password, rep_reg_password } = req.body;
 
 		if (!reg_username || !reg_email || !reg_password || !rep_reg_password) {
-			console.log('Brak wymaganych danych');
 			return res.status(400).send('Proszę uzupełnić wszystkie pola!');
 		}
 
 		connection.query('SELECT email FROM users WHERE email = ?', [reg_email], async (error, results) => {
 			if (error) {
-				console.log('Błąd zapytania do bazy danych:', error);
 				return res.status(500).send('Błąd serwera');
 			}
 
 			if (results.length > 0) {
-				console.log('Email already registered');
 				return res.status(400).send('Ten adres e-mail jest już zarejestrowany!');
 			}
 
 			if (reg_password !== rep_reg_password) {
-				console.log('Passwords do not match');
 				return res.status(400).send('Hasła muszą być identyczne');
 			}
 
@@ -47,22 +43,19 @@ exports.registerUser = async (req, res) => {
 
 				connection.query('INSERT INTO users SET ?', { id: userId, name: reg_username, email: reg_email, password: hashedPasswd }, (error, results) => {
 					if (error) {
-						console.log('Błąd wstawiania użytkownika:', error);
 						return res.status(500).send('Błąd serwera');
 					}
 
 					const token = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '1h' });
 					res.cookie('SESSID:', token, jwtCookieOptions);
-					console.log('Użytkownik zarejestrowany pomyślnie:', results);
+
 					res.status(200).send('Użytkownik zarejestrowany pomyślnie. Możesz się zalogować!');
 				});
 			} catch (err) {
-				console.log('Błąd podczas przygotowywania hasła:', err);
 				return res.status(500).send('Błąd serwera');
 			}
 		});
 	} catch (err) {
-		console.log('Błąd rejestracji:', err);
 		return res.status(500).send('Błąd serwera');
 	}
 };
@@ -117,7 +110,6 @@ exports.changeEmail = (req, res) => {
 
 	connection.query('SELECT email FROM users WHERE email=?', [newEmail], async (error, results) => {
 		if (error) {
-			console.log('Błąd zapytania do bazy danych', error);
 			return res.status(500).send('Błąd serwera.');
 		}
 
@@ -127,7 +119,6 @@ exports.changeEmail = (req, res) => {
 
 		connection.query('SELECT id FROM users WHERE name=? AND email=?', [username, email], async (error, results) => {
 			if (error) {
-				console.log('Błąd zapytania do bazy danych', error);
 				return res.status(500).send('Błąd serwera');
 			}
 
