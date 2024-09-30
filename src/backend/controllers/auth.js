@@ -107,3 +107,42 @@ exports.loginUser = async (req, res) => {
 exports.logoutUser = (req, res) => {
 	res.clearCookie('SESSID', jwtCookieOptions);
 };
+
+exports.changeEmail = (req, res) => {
+	const { userId, username, email, newEmail } = req.body;
+
+	if (!userId || !newEmail || !username || !email) {
+		return res.status(400).send('Podaj prawidłowe dane');
+	}
+
+	connection.query('SELECT email FROM users WHERE email=?', [newEmail], async (error, results) => {
+		if (error) {
+			console.log('Błąd zapytania do bazy danych', error);
+			return res.status(500).send('Błąd serwera.');
+		}
+
+		if (results.length > 0) {
+			return res.status(400).send('Ten adres e-mail jest już zarejestrowany!');
+		}
+
+		connection.query('SELECT id FROM users WHERE name=? AND email=?', [username, email], async (error, results) => {
+			if (error) {
+				console.log('Błąd zapytania do bazy danych', error);
+				return res.status(500).send('Błąd serwera');
+			}
+
+			if (results.length === 0) {
+				return res.status(400).send('Podano nieprawidłowe dane użytkownika');
+			}
+
+			const userId = results[0].id;
+			connection.query('UPDATE users SET email=? WHERE id=?', [newEmail, userId], async updateError => {
+				if (updateError) {
+					console.log('Błąd aktualizacji adresu e-mail', updateError);
+					return res.status(500).send('Błąd serwera');
+				}
+				return res.status(200).send('Adres e-mail zmieniony pomyślnie');
+			});
+		});
+	});
+};

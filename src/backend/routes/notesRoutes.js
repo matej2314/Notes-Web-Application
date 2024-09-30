@@ -61,6 +61,30 @@ router.get('/', (req, res) => {
 	});
 });
 
+router.get('/all', (req, res) => {
+	const userId = req.body.userId;
+
+	if (!userId) {
+		return res.send(400).send('Brak danych');
+	}
+
+	const sqlQuery = `SELECT * FROM notes WHERE user_id=?`;
+
+	connection.query(sqlQuery, [userId], (err, rows) => {
+		if (err) {
+			console.log('Błąd podczas pobierania danych:', err.message);
+			return res.status(500).send('Błąd serwera.');
+		}
+		if (rows.length === 0) {
+			return res.status(400).send('Brak notatek użytkownika.');
+		}
+
+		res.status(200).json({
+			notes: rows,
+		});
+	});
+});
+
 router.delete('/', (req, res) => {
 	const userId = req.body.userId;
 	const noteId = req.body.noteId;
@@ -100,4 +124,5 @@ router.put('/', (req, res) => {
 		return res.status(200).send('Notatka zaktualizowana pomyślnie!');
 	});
 });
+
 module.exports = router;
