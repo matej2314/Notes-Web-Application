@@ -17,7 +17,7 @@ const verifyToken = (req, res, next) => {
 			return res.status(401).send('Dane uwierzytelniające nie prawidłowe.');
 		}
 
-		req.user = decoded;
+		req.userId = decoded.id;
 		next();
 	});
 };

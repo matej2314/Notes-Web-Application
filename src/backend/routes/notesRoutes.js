@@ -5,20 +5,22 @@ const connection = require('../db');
 const bodyParser = require('body-parser');
 const generatePDF = require('../controllers/generatePDF');
 const verifyJWT = require('../controllers/verifyJWT');
+const { v4: uuidv4 } = require('uuid');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.post('/', (req, res) => {
-	const id = req.body.noteId;
-	const userId = req.body.userId;
+router.post('/', verifyJWT, (req, res) => {
+	const userId = req.userId;
 	const noteTitle = req.body.notetitle;
 	const noteContent = req.body.notetext;
-	const date = req.body.date;
 
 	if (!userId || !noteContent || !noteTitle || !date || noteContent.trim() === '') {
 		return res.status(400).send('Prześlij poprawne dane!');
 	}
+
+	const date = new Date().toLocaleString();
+	const id = uuidv4();
 
 	const sqlQuery = 'INSERT INTO notes (id,user_id, title, note, date) VALUES(?,?,?,?,?)';
 
@@ -27,12 +29,15 @@ router.post('/', (req, res) => {
 			console.error('Błąd podczas dodawania notatki:', err);
 			return res.status(500).send(`Błąd serwera: ${err.message}`);
 		}
-		res.status(201).send('Notatka dodana pomyślnie!');
+		res.status(201).json({
+			message: 'Notatka dodana pomyślnie!',
+			noteId: id,
+		});
 	});
 });
 
-router.get('/', (req, res) => {
-	const userId = req.body.userId;
+router.get('/', verifyJWT, (req, res) => {
+	const userId = req.userId;
 	const noteId = req.body.noteId;
 
 	if (!userId || !noteId) {
@@ -61,8 +66,8 @@ router.get('/', (req, res) => {
 	});
 });
 
-router.get('/all', (req, res) => {
-	const userId = req.body.userId;
+router.get('/all', verifyJWT, (req, res) => {
+	const userId = req.userId;
 
 	if (!userId) {
 		return res.send(400).send('Brak danych');
@@ -85,8 +90,8 @@ router.get('/all', (req, res) => {
 	});
 });
 
-router.delete('/', (req, res) => {
-	const userId = req.body.userId;
+router.delete('/', verifyJWT, (req, res) => {
+	const userId = req.userId;
 	const noteId = req.body.noteId;
 
 	if (!userId || !noteId) {
@@ -104,11 +109,11 @@ router.delete('/', (req, res) => {
 	});
 });
 
-router.put('/', (req, res) => {
+router.put('/', verifyJWT, (req, res) => {
 	const noteId = req.body.noteId;
 	const noteTitle = req.body.notetitle;
 	const noteContent = req.body.notetext;
-	const userId = req.body.userId;
+	const userId = req.userId;
 
 	if (!noteId || !noteContent || noteContent.trim() === '') {
 		return res.status(400).send('Niepoprawne dane');

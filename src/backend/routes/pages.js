@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '../../../public/html', 'index.html'));
 });
 
-router.get('/main', (req, res) => {
+router.get('/main', verifyJWT, (req, res) => {
 	res.sendFile(path.join(__dirname, '../../../public/html', 'main_page.html'));
 });
 
