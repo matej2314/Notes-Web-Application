@@ -9,8 +9,7 @@ const cookieParser = require('cookie-parser');
 const jwtCookieOptions = {
 	httpOnly: true,
 	secure: false,
-	sameSite: 'Strict',
-	maxAge: 3600000,
+	maxAge: 86400000,
 };
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -47,7 +46,7 @@ exports.registerUser = async (req, res) => {
 					}
 
 					const token = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '1h' });
-					res.cookie('SESSID:', token, jwtCookieOptions);
+					res.cookie('SESSID', token, jwtCookieOptions);
 
 					res.status(200).send('Użytkownik zarejestrowany pomyślnie. Możesz się zalogować!');
 				});
@@ -64,17 +63,17 @@ exports.loginUser = async (req, res) => {
 	const { username, userpassword } = req.body;
 
 	if (!username || !userpassword) {
-		return res.status(400).send('Proszę uzupełnić wszystkie pola!');
+		return res.status(400).json({ message: 'Proszę uzupełnić wszystkie pola!' });
 	}
 
 	connection.query('SELECT * FROM users WHERE name=?', [username], async (error, results) => {
 		if (error) {
 			console.log(error);
-			return res.status(500).send('Błąd serwera');
+			return res.status(500).json({ message: 'Błąd serwera' });
 		}
 
 		if (results.length === 0) {
-			return res.status(400).send('Niepoprawny login lub hasło.');
+			return res.status(400).json({ message: 'Niepoprawny login lub hasło.' });
 		}
 
 		const user = results[0];
@@ -82,17 +81,19 @@ exports.loginUser = async (req, res) => {
 		try {
 			const isMatch = await bcrypt.compare(userpassword, user.password);
 			if (!isMatch) {
-				return res.status(400).send('Niepoprawny login lub hasło');
+				return res.status(400).json({ message: 'Niepoprawny login lub hasło' });
 			}
 
-			const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+			const token = jwt.sign({ id: user.id, username: username }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-			res.cookie('SESSID:', token, jwtCookieOptions);
+			// Ustaw ciasteczko
+			res.cookie('SESSID', token, jwtCookieOptions);
 
-			return res.status(200).json({ message: 'Zalogowano pomyślnie' });
+			// Przekieruj użytkownika do strony głównej
+			return res.status(200).json({ message: 'Zalogowano pomyślnie', redirectUrl: 'http://localhost:8088/main', username: user.name, userId: user.id });
 		} catch (bcryptError) {
 			console.log('Wprowadź dane ponownie.', bcryptError);
-			return res.status(500).send('Błąd serwera');
+			return res.status(500).json({ message: 'Błąd serwera' });
 		}
 	});
 };

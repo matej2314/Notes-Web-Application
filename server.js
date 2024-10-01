@@ -1,10 +1,20 @@
 const path = require('path');
 const dotenv = require('dotenv').config({ path: './.env' });
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
 const port = process.env.SERV_PORT;
 const favicon = require('serve-favicon');
+const cors = require('cors');
+
+app.use(cookieParser());
+
+app.use(
+	cors({
+		origin: 'http://localhost:8080',
+	})
+);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
