@@ -16,9 +16,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.registerUser = async (req, res) => {
 	try {
-		const { reg_username, reg_email, reg_password, rep_reg_password } = req.body;
+		const { reg_username, reg_email, reg_password } = req.body;
 
-		if (!reg_username || !reg_email || !reg_password || !rep_reg_password) {
+		if (!reg_username || !reg_email || !reg_password) {
 			return res.status(400).send('Proszę uzupełnić wszystkie pola!');
 		}
 
@@ -29,10 +29,6 @@ exports.registerUser = async (req, res) => {
 
 			if (results.length > 0) {
 				return res.status(400).send('Ten adres e-mail jest już zarejestrowany!');
-			}
-
-			if (reg_password !== rep_reg_password) {
-				return res.status(400).send('Hasła muszą być identyczne');
 			}
 
 			try {
@@ -48,7 +44,7 @@ exports.registerUser = async (req, res) => {
 					const token = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '1h' });
 					res.cookie('SESSID', token, jwtCookieOptions);
 
-					res.status(200).send('Użytkownik zarejestrowany pomyślnie. Możesz się zalogować!');
+					res.status(200).json({ message: 'Użytkownik zarejestrowany pomyślnie. Możesz się zalogować!' });
 				});
 			} catch (err) {
 				return res.status(500).send('Błąd serwera');
@@ -99,7 +95,8 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.logoutUser = (req, res) => {
-	res.clearCookie('SESSID', jwtCookieOptions);
+	res.clearCookie('SESSID', { httpOnly: true, secure: false });
+	res.status(200).json({ message: 'Wylogowano poprawnie.' });
 };
 
 exports.changeEmail = (req, res) => {

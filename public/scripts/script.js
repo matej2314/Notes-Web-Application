@@ -2,12 +2,22 @@
 
 const btns = document.querySelectorAll('.btn');
 const btnLogin = document.getElementById('btn-login');
-const modalWindow = document.getElementById('modal_window');
+const modalWindow = document.getElementById('login_window');
+const regWindow = document.getElementById('reg_form');
 const loginInput = document.getElementById('login_input');
 const passwdInput = document.getElementById('pass_input');
 const btnSubmit = document.getElementById('btn-submit');
 const mainSiteBtn = document.getElementById('mainSiteBtn');
 const allinputs = document.querySelectorAll('.input');
+
+btnLogin.addEventListener('click', function () {
+	if (regWindow.classList.contains('visible')) {
+		regWindow.classList.remove('visible');
+		regWindow.classList.add('invisible');
+	}
+	modalWindow.classList.toggle('invisible');
+	modalWindow.classList.toggle('visible');
+});
 
 // Funkcja walidująca hasło
 function isValidPassword(password) {
@@ -25,11 +35,6 @@ btns.forEach(btn =>
 		alert('Zaloguj się, aby uaktywnić funkcję!');
 	})
 );
-
-btnLogin.addEventListener('click', function () {
-	modalWindow.classList.toggle('invisible');
-	modalWindow.classList.toggle('visible');
-});
 
 btnSubmit.addEventListener('click', async function (e) {
 	e.preventDefault();

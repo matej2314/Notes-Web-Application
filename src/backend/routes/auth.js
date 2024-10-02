@@ -6,5 +6,6 @@ const verifyJWT = require('../controllers/verifyJWT');
 router.post('/register', authController.registerUser);
 router.post('/login', authController.loginUser);
 router.put('/usermail', verifyJWT, authController.changeEmail);
+router.post('/logout', authController.logoutUser);
 
 module.exports = router;

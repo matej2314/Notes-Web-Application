@@ -36,7 +36,7 @@
         </nav>
     </header>
     <form action="">
-        <div id="modal_window" tabindex="-1" class=" invisible w-fit h-fit fixed flex flex-col justify-start items-center z-10 border-4 border-white pt-2 pl-10 pr-10 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg">
+        <div id="login_window" tabindex="-1" class=" invisible w-fit h-fit fixed flex flex-col justify-start items-center z-10 border-4 border-white pt-2 pl-10 pr-10 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg">
             <p class="mb-5 text-xl uppercase">Logowanie</p>
             <label id="login_input--label" for="login_input" class="mb-5">Podaj login:</label>
             <input id="login_input" class="mb-5 border-2 border-stone-950 text-stone-950 pl-2 input" type="text" minlength="5" maxlength="10" required />
@@ -45,18 +45,18 @@
             <input type="submit" id="btn-submit" class="mt-10 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" value="Zaloguj" />
     </form>
     </div>
-    <div id="reg_form" class="w-fit h-fit fixed flex flex-col justify-start items-center z-10 border-4 border-white pt-2 pl-10 pr-10 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg">
+    <div id="reg_form" class="w-fit h-fit fixed flex flex-col justify-start items-center z-10 border-4 border-white pt-2 pl-10 pr-10 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg mb-36 invisible">
         <p class="mb-5 text-xl uppercase">Rejestracja</p>
         <form action="" class="flex flex-col justify-center items-center">
-            <label for="reg_login--input" class="">Wprowadź login:</label>
-            <input type="text" name="reg_login--input" class="" id="reg_login--input" minlength="5" maxlength="10" required />
-            <label for="reg_passwd--input" class="">Wprowdź hasło:</label>
-            <input type="password" name="reg_passwd-input" class="" id="reg_passwd--input" minlength="10" maxlength="30" required />
-            <label for="rep_regpasswd--input" class="">Powtórz hasło:</label>
-            <input type="password" class="" name="rep_regpasswd--input" id="rep_regpasswd--input" minlength="10" maxlength="30" required />
-            <label for="reg_email--input" class="">Wprowadź adres e-mail:</label>
-            <input type="email" class="" name="reg_email--input" id="reg_email--input" required />
-            <input type="submit" class="mt-10 text-lg" value="Rejestruj" />
+            <label for="reg_login--input" class="mb-5">Wprowadź login:</label>
+            <input type="text" name="reg_login--input" class="text-stone-950 pl-2" id="reg_login--input" minlength="5" maxlength="10" required />
+            <label for="reg_passwd--input" class=" mb-5 mt-5">Wprowdź hasło:</label>
+            <input type="password" name="reg_passwd-input" class="text-stone-950 pl-2" id="reg_passwd--input" minlength="10" maxlength="30" required />
+            <label for="rep_regpasswd--input" class="mb-5 mt-5">Powtórz hasło:</label>
+            <input type="password" class="text-stone-950 pl-2" name="rep_regpasswd--input" id="rep_regpasswd--input" minlength="10" maxlength="30" required />
+            <label for="reg_email--input" class="mb-5 mt-5">Wprowadź adres e-mail:</label>
+            <input type="email" class="text-stone-950 pl-2" name="reg_email--input" id="reg_email--input" required />
+            <input type="submit" id="reg_submit--btn" class="mt-10 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" value="Rejestruj" />
         </form>
     </div>
     <div class="w-3/4 h-screen flex flex-row justify-center main_container m-0 p-0">
@@ -81,7 +81,7 @@
                     <li>Node.js</li>
                 </ul>
                 <p class="mt-10">Załóż konto i sprawdź funkcjonowanie aplikacji samodzielnie!</p>
-                <p>Testowe dane: testowy/Test123456!</p>
+                <p>Testowe dane: testowy/Test123456!!</p>
             </div>
         </div>
         <div class="w-3/12 h-full border-2 border-stone-950 rounded-tr-lg flex flex-col items-center bg-[#dcecf5]">

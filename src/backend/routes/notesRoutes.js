@@ -10,23 +10,35 @@ const { v4: uuidv4 } = require('uuid');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
+const formattedDate = function (date) {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	const seconds = String(date.getSeconds()).padStart(2, '0');
+
+	return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+};
+
 router.post('/', verifyJWT, (req, res) => {
 	const userId = req.userId;
 	const noteTitle = req.body.notetitle;
 	const noteContent = req.body.notetext;
+	const noteWeight = req.body.weight;
 
-	if (!userId || !noteContent || !noteTitle || !date || noteContent.trim() === '') {
+	if (!userId || !noteContent || !noteTitle || noteContent.trim() === '') {
 		return res.status(400).send('Prześlij poprawne dane!');
 	}
 
-	const date = new Date().toLocaleString();
 	const id = uuidv4();
+	const date = formattedDate(new Date());
 
-	const sqlQuery = 'INSERT INTO notes (id,user_id, title, note, date) VALUES(?,?,?,?,?)';
+	const sqlQuery = 'INSERT INTO notes (id, user_id, title, note, weight, date) VALUES(?,?,?,?,?,?)';
 
-	connection.query(sqlQuery, [id, userId, noteTitle, noteContent, date], (err, result) => {
+	connection.query(sqlQuery, [id, userId, noteTitle, noteContent, noteWeight, date], (err, result) => {
 		if (err) {
-			console.error('Błąd podczas dodawania notatki:', err);
+			console.log('Błąd podczas dodawania notatki:', err.message);
 			return res.status(500).send(`Błąd serwera: ${err.message}`);
 		}
 		res.status(201).json({
@@ -61,6 +73,7 @@ router.get('/', verifyJWT, (req, res) => {
 			userId: note.user_id,
 			noteTitle: note.title,
 			noteText: note.note,
+			noteWeight: note.weight,
 			date: note.date,
 		});
 	});
@@ -105,7 +118,7 @@ router.delete('/', verifyJWT, (req, res) => {
 			console.log('Błąd podczas usuwania danych:', err.message);
 			return res.status(500).send('Błąd serwera', err.message);
 		}
-		return res.status(200).send('Notatka usunięta pomyślnie');
+		return res.status(200).json({ message: 'Notatka usunięta pomyślnie' });
 	});
 });
 
@@ -113,15 +126,16 @@ router.put('/', verifyJWT, (req, res) => {
 	const noteId = req.body.noteId;
 	const noteTitle = req.body.notetitle;
 	const noteContent = req.body.notetext;
+	const noteWeight = req.body.noteWeight;
 	const userId = req.userId;
 
 	if (!noteId || !noteContent || noteContent.trim() === '') {
 		return res.status(400).send('Niepoprawne dane');
 	}
 
-	const sqlQuery = 'UPDATE notes SET title=?, note=? WHERE id=? AND user_id=?';
+	const sqlQuery = 'UPDATE notes SET title=?, note=? weight=? WHERE id=? AND user_id=?';
 
-	connection.query(sqlQuery, [noteTitle, noteContent, noteId, userId], (err, result) => {
+	connection.query(sqlQuery, [noteTitle, noteContent, noteWeight, noteId, userId], (err, result) => {
 		if (err) {
 			console.error('Błąd podczas aktualizacji notatki', err.message);
 			return res.status(500).send('Błąd serwera');

@@ -33,27 +33,52 @@
             <ul class=" w-3/4 h-fit flex flex-row items-center justify-around border-2 border-stone-950 rounded-lg font-roboto bg-[#9abdcd]">
                 <li>Strona główna</li>
                 <li>O projekcie</li>
-                <li>Wyloguj</li>
+                <li><button class="logOutBtn">Wyloguj</button></li>
             </ul>
         </nav>
     </header>
     <div class="w-3/4 h-screen flex flex-row justify-center main_container m-0 p-0">
+        <div id="addNote--form" class="w-2/4 h-fit fixed top-0 left-0 translate-x-2/4 translate-y-2/4 flex flex-col justify-start items-center z-10 border-4 border-white pt-1 pl-5 pr-5 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg invisible">
+            <button id="closeNoteForm--btn" class="absolute w-full h-fit flex flex-row justify-end"><img src="../images/cross.png" alt="exit" class="relative top-0.5 right-2" /></button>
+            <form action="" id="" class="w-full h-full flex flex-col justify-center mt-5">
+                <h2 class="w-full h-full text-xl flex flex-row justify-center mb-2">Dodaj notatkę</h2>
+                <label for="input_noteTitle--label" class="mb-2">Tytuł notatki:</label>
+                <input id="input_noteTitle" class="text-stone-950 border-2 border-stone-950 mb-2" type="text" name="input_noteTitle" required />
+                <label for="input_noteWeight--label" class="mb-2">Priorytet:</label>
+                <input type="number" name="input_noteWeight" id="input_noteWeight" maxlength="1" class="text-stone-950 border-2 border-stone-950 mb-2" />
+                <label for="input_noteText" id="input_noteText--label" class="mb-2">Treść notatki:</label>
+                <textarea type="text" name="input_noteText" id="input_noteText" class="h-32 text-stone-950 resize-none pl-1 pt-1 border-2 border-stone-950"></textarea>
+                <input type="submit" id="sendNote--btn" class="mt-10 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" value="Zapisz" />
+            </form>
+        </div>
         <div class=" h-full w-3/4 border-2 border-stone-950 flex flex-col rounded-tl-lg justify-start align-start  bg-[#dcecf5]">
             <h2 class="w-full h-fit flex flex-row justify-center text-lg font-semibold">Twoje notatki:</h2>
             <div class="w-fit h-1/4 flex flex-col items-center border-2 border-dotted border-stone-950 pt-2 pl-5 pr-5 pb-10 ml-10">
                 <h3 class="font-roboto">Dodaj notatkę</h3>
-                <button class=" w-24 h-24 mt-7 flex flex-row justify-center"><img clas="w-full h-full" src="../images/plus-sign.png" alt=""></button>
+                <button class=" w-24 h-24 mt-7 flex flex-row justify-center addnote"><img clas="w-full h-full" src="../images/plus-sign.png" alt=""></button>
             </div>
-            <div class="w-full h-fit flex flex-row justify-start align-center">
-                <div class="h-fit w-1/4 flex flex-col justify-start align-center bg-[#ffffa2] pl-15 pt-2 pb-10 ml-10 mt-10 shadow-zinc-400 shadow-lg">
+            <div id="divNotes" class=" w-full h-full flex flex-row justify-start align-center">
+                <div class="h-fit w-1/4 flex flex-col justify-start align-center bg-[#ffffa2] pl-15 pt-2 pb-2 ml-10 mt-10 shadow-zinc-400 shadow-lg">
                     <h2 class="w-full h-fit font-shantell flex flex-row justify-center">Tytuł notatki</h2>
-                    <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm">ID</h4>
-                    <p class="w-full h-full font-shantell text-2xl ml-2">Testowa nowa notatka żółta</p>
+                    <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm" id="note_noteId">ID</h4>
+                    <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm">Priorytet</h4>
+                    <p class="w-full h-full flex flex-row text-xl ml-2">Testowa nowa notatka żółta</p>
+                    <div id="icons_container--yellow" class=" w-full h-fit flex flex-row justify-end mt-5 ">
+                        <button id="pdf_note--btn"><img src="../images/pdf-file.png" alt="generate-pdf-file" class="mr-2" /></button>
+                        <button id="edit_note--btn"><img src="../images/edit.png" alt="edit your note" class="ml-2 mr-2" /></button>
+                        <button id="edit_note--btn"><img src="../images/bin.png" alt="delete your note" class="ml-2 mr-2" /></button>
+                    </div>
                 </div>
-                <div class="h-fit w-1/4 flex flex-col justify-start align-center bg-[#ff7ecd] pl-15 pt-2 pb-10 ml-10 mt-10 shadow-zinc-400 shadow-lg">
+                <div class="h-fit w-1/4 flex flex-col justify-start align-center bg-[#ff7ecd] pl-15 pt-2 pb-2 ml-10 mt-10 shadow-zinc-400 shadow-lg">
                     <h2 class="w-full h-fit font-shantell flex flex-row justify-center">Tytuł notatki</h2>
-                    <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm">ID</h4>
-                    <p class="w-full h-full font-shantell text-2xl ml-2">Testowa nowa notatka różowa</p>
+                    <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm" id="note_noteId">ID</h4>
+                    <h2 class="w-full h-fit font-roboto flex flex-row justify-center text-sm">Priorytet</h2>
+                    <p class="w-full h-full flex flex-row text-xl ml-2">Testowa nowa notatka różowa</p>
+                    <div id="icons_container--pink" class="w-full h-fit flex flex-row justify-end mt-5">
+                        <button id="pdf_note--btn"><img src="../images/pdf-file.png" alt="generate-pdf-file" class="mr-2" /></button>
+                        <button id="edit_note--btn"><img src="../images/edit.png" alt="edit your note" class="ml-2 mr-2" /></button>
+                        <button id="edit_note--btn"><img src="../images/bin.png" alt="delete your note" class="ml-2 mr-2" /></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,16 +88,16 @@
                 <img src="../images/pexels-simon-robben-55958-614810.jpg" alt="" srcset="">
             </div>
             <ul class=" w-full h-fit mt-5 flex flex-col align-center ">
-                <li><button>Dodaj notatkę</button></li>
+                <li><button class="addnote">Dodaj notatkę</button></li>
                 <li><button>Zmień adres e-mail</button></li>
                 <li><button>Zmień hasło</button></li>
-                <li><button>Wyloguj</button></li>
+                <li><button class="logOutBtn">Wyloguj</button></li>
             </ul>
         </div>
     </div>
     <div class="w-3/4 h-fit border-2 border-stone-950 flex flex-row justify-center rounded-bl-lg rounded-br-lg footer_container bg-[#9abdcd]">
         <h2 class="h-fit w-fit font-roboto font-medium pb-2 pt-2">Copyright@Mateusz Śliwowski - mateo2314</h2>
     </div>
-    <script src="/scripts/main.js"></script>
+    <script type="module" src="/scripts/main.js"></script>
 </body>
 </html>
