@@ -71,10 +71,9 @@ btnSubmit.addEventListener('click', async function (e) {
 
 			alert(`Witamy spowrotem! ${result.username}`);
 			sessionStorage.setItem('userId', result.userId);
-			window.location.href = result.redirectUrl; // Przekierowanie na URL
+			window.location.href = result.redirectUrl;
 		} else {
-			// W tej sekcji nie wywołujemy response.json() ponownie
-			const errorMessage = await response.text(); // Możesz też użyć response.json(), jeśli zwracasz JSON
+			const errorMessage = await response.text();
 			alert('Niepoprawne dane logowania. ' + errorMessage);
 		}
 	} catch (error) {

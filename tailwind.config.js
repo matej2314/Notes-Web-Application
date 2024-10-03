@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+	mode: 'jit',
 	content: ['./public/**/*.html', './src/**/*.js', './views/**/*.ejs'],
 	theme: {
 		extend: {
@@ -9,6 +10,8 @@ module.exports = {
 			},
 			colors: {
 				navcolor: '#ccaf60',
+				yellownote: '#ffffa2',
+				pinknote: '#ff7ecd',
 			},
 		},
 	},

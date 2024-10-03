@@ -6,20 +6,10 @@ const bodyParser = require('body-parser');
 const generatePDF = require('../controllers/generatePDF');
 const verifyJWT = require('../controllers/verifyJWT');
 const { v4: uuidv4 } = require('uuid');
+const formattedDate = require('../backend_modules/formattedDate');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
-
-const formattedDate = function (date) {
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const day = String(date.getDate()).padStart(2, '0');
-	const hours = String(date.getHours()).padStart(2, '0');
-	const minutes = String(date.getMinutes()).padStart(2, '0');
-	const seconds = String(date.getSeconds()).padStart(2, '0');
-
-	return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
-};
 
 router.post('/', verifyJWT, (req, res) => {
 	const userId = req.userId;
@@ -103,7 +93,7 @@ router.get('/all', verifyJWT, (req, res) => {
 	});
 });
 
-router.delete('/', verifyJWT, (req, res) => {
+router.delete('/delete', verifyJWT, (req, res) => {
 	const userId = req.userId;
 	const noteId = req.body.noteId;
 
@@ -118,11 +108,15 @@ router.delete('/', verifyJWT, (req, res) => {
 			console.log('Błąd podczas usuwania danych:', err.message);
 			return res.status(500).send('Błąd serwera', err.message);
 		}
+
+		if (result.affectedRows === 0) {
+			return res.status(404).json({ message: 'Notatka nie została znaleziona' });
+		}
 		return res.status(200).json({ message: 'Notatka usunięta pomyślnie' });
 	});
 });
 
-router.put('/', verifyJWT, (req, res) => {
+router.put('/edit', verifyJWT, (req, res) => {
 	const noteId = req.body.noteId;
 	const noteTitle = req.body.notetitle;
 	const noteContent = req.body.notetext;
@@ -140,7 +134,7 @@ router.put('/', verifyJWT, (req, res) => {
 			console.error('Błąd podczas aktualizacji notatki', err.message);
 			return res.status(500).send('Błąd serwera');
 		}
-		return res.status(200).send('Notatka zaktualizowana pomyślnie!');
+		return res.status(200).json({ row: row[-1] });
 	});
 });
 

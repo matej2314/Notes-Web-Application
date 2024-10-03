@@ -1,19 +1,147 @@
 'use strict';
 
-export const showNote = function () {
+export const showNote = function (notes) {
 	const divNotes = document.getElementById('divNotes');
-	const newNoteId = sessionStorage.getItem('noteId');
 
-	const html = ` <div class="h-fit w-1/4 flex flex-col justify-start align-center bg-[#ffffa2] pl-15 pt-2 pb-2 ml-10 mt-10 shadow-zinc-400 shadow-lg">
-                        <h2 class="w-full h-fit font-shantell flex flex-row justify-center">T${noteTitle.value}</h2>
-                        <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm" id="note_noteId">ID ${newNoteId}</h4>
-                        <h4 class="w-full h-fit font-roboto flex flex-row justify-center text-sm">Priorytet: ${noteWeight.value}</h4>
-                        <p class="w-full h-full font-shantell text-2xl ml-2">${noteText.value}</p>
-                        <div id="icons_container--yellow" class=" w-full h-fit flex flex-row justify-end mt-5">
-                            <button id="pdf_note--btn"><img src="../images/pdf-file.png" alt="generate-pdf-file" /></button>
-                            <button id="edit_note--btn"><img src="../images/edit.png" alt="edit your note" class="ml-2" /></button>
-                            <button id="del_note--btn" class="del_note--btn"><img src="../images/bin.png" alt="delete your note" class="ml-2" /></button>
-                        </div>`;
+	notes.notes.forEach(note => {
+		const div = document.createElement('div');
+		div.className = 'note-container';
 
-	divNotes.insertAdjacentHTML('beforeend', html);
+		const backgroundColor = note.weight < 2 ? '#ffffa2' : '#ff7ecd';
+		div.setAttribute('style', `background-color: ${backgroundColor}; height: fit-content; width: 25%; display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px 15px; margin-left: 10px; margin-top: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);`);
+
+		const h2Title = document.createElement('h2');
+		h2Title.setAttribute('style', 'width: 100%; font-family: "Shantell Sans", cursive; text-align: center;');
+		h2Title.textContent = note.title;
+
+		const h4Weight = document.createElement('h4');
+		h4Weight.setAttribute('style', 'width: 100%; font-family: "Roboto", sans-serif; font-size: 0.875rem; text-align: center;');
+		h4Weight.textContent = `Priorytet: ${note.weight}`;
+
+		const pNote = document.createElement('p');
+		pNote.setAttribute('style', 'width: 100%; font-family: "Shantell Sans", cursive; font-size: 1.5rem; margin-left: 0.5rem;');
+		pNote.textContent = note.note;
+
+		const iconsContainer = document.createElement('div');
+		iconsContainer.setAttribute('style', 'width: 100%; display: flex; justify-content: flex-end; margin-top: 1rem;');
+
+		const pdfBtn = document.createElement('button');
+		pdfBtn.setAttribute('data-noteId', note.id);
+		pdfBtn.setAttribute('data-noteTitle', note.title);
+		pdfBtn.setAttribute('data-noteWeight', note.weight);
+		pdfBtn.setAttribute('data-noteText', note.note);
+		const pdfImg = document.createElement('img');
+		pdfImg.src = '../images/pdf-file.png';
+		pdfImg.alt = 'generate-pdf-file';
+		pdfBtn.appendChild(pdfImg);
+
+		const editBtn = document.createElement('button');
+		editBtn.classList.add('edit_note--btn');
+		editBtn.setAttribute('data-noteId', note.id);
+		editBtn.setAttribute('data-noteTitle', note.title);
+		editBtn.setAttribute('data-noteWeight', note.weight);
+		editBtn.setAttribute('data-noteText', note.note);
+
+		const editImg = document.createElement('img');
+		editImg.src = '../images/edit.png';
+		editImg.alt = 'edit your note';
+		editImg.setAttribute('style', 'margin-left: 1rem;');
+		editBtn.appendChild(editImg);
+
+		const deleteBtn = document.createElement('button');
+		deleteBtn.classList.add('del_note--btn');
+		deleteBtn.setAttribute('data-noteId', note.id);
+		const deleteImg = document.createElement('img');
+		deleteImg.src = '../images/bin.png';
+		deleteImg.alt = 'delete your note';
+		deleteImg.setAttribute('style', 'margin-left: 1rem; ');
+		deleteBtn.appendChild(deleteImg);
+
+		iconsContainer.appendChild(pdfBtn);
+		iconsContainer.appendChild(editBtn);
+		iconsContainer.appendChild(deleteBtn);
+
+		div.appendChild(h2Title);
+		div.appendChild(h4Weight);
+		div.appendChild(pNote);
+		div.appendChild(iconsContainer);
+
+		divNotes.appendChild(div);
+	});
+};
+
+export const updateNote = async function (noteId, noteTitle, noteContent, noteWeight) {
+	try {
+		const response = await fetch('http://localhost:8088/edit', {
+			method: 'PUT',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ noteId, noteTitle, noteContent, noteWeight }),
+		});
+
+		if (!response.ok) {
+			console.log('Wystąpił błąd podczas aktualizacji notatki:', response.statusText);
+			alert('Błąd podczas aktualizacji notatki.');
+			return;
+		}
+
+		const updatedNote = await response.json();
+		return updateNote;
+	} catch (error) {
+		if (error) {
+			console.log('Błąd aktualizacji notatki:', error.message);
+			alert('Błąd aktualizacji notatki');
+		}
+	}
+};
+
+export const deleteNote = async function (noteId, noteElement) {
+	console.log(noteId, noteElement);
+	try {
+		const response = await fetch(`http://localhost:8088/notes/delete`, {
+			method: 'DELETE',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ noteId }),
+		});
+
+		if (!response.ok) {
+			console.log('Wystąpił błąd podczas wysyłania danych:', response.statusText);
+			alert('Błąd podczas usuwania notatki.');
+			return;
+		}
+
+		noteElement.remove();
+		alert('Notatka została usunięta');
+	} catch (error) {
+		if (error) {
+			console.log('Wystąpił błąd:', error.message);
+			alert('Nie udało się usunąć notatki');
+		}
+	}
+};
+
+export const logOut = async function (req, res) {
+	try {
+		const response = await fetch('http://localhost:8088/logout', {
+			method: 'POST',
+			credentials: 'include',
+		});
+
+		if (response.ok) {
+			alert('Wylogowano pomyślnie!');
+			window.location.href = '/';
+		} else {
+			alert('Wylogowanie nie powiodło się');
+		}
+	} catch (error) {
+		if (error) {
+			console.log('Wystąpił błąd:', error.message);
+			alert('Wystąpił błąd podczas wylogowywania.');
+		}
+	}
 };
