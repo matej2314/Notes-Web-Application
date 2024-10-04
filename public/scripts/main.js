@@ -1,5 +1,6 @@
 import { showNote, logOut, deleteNote, updateNote } from '../JS_modules/main_page_functions.js';
 import { showAddForm, closeAddForm, closeEditForm } from '../JS_modules/formFunctions.js';
+import { getPDF } from '../JS_modules/downloadPDF.js';
 
 const logOutBtns = document.querySelectorAll('.logOutBtn');
 const addNoteBtns = document.querySelectorAll('.addnote');
@@ -9,6 +10,8 @@ const noteText = document.getElementById('input_noteText');
 const saveNoteBtn = document.getElementById('sendNote--btn');
 const editModal = document.getElementById('editNote--form');
 const updatedNoteBtn = document.getElementById('sendNewNote--btn');
+const fromNewestBtn = document.getElementById('fromNewest--btn');
+const fromOldestBtn = document.getElementById('fromOldest--btn');
 
 const addNote = async function () {
 	const noteTitleValue = noteTitle.value;
@@ -39,6 +42,7 @@ const addNote = async function () {
 
 		if (addedNote && addedNote.noteId) {
 			alert(`Dodano notatkę o ID: ${addedNote.noteId}`);
+			location.reload();
 		}
 	} catch (error) {
 		console.log('Wystąpił błąd podczas wysyłania danych:', error.message);
@@ -48,13 +52,12 @@ const addNote = async function () {
 
 saveNoteBtn.addEventListener('click', function (e) {
 	e.preventDefault();
+	addNote();
 	addNoteForm.classList.remove('visible');
 	addNoteForm.classList.add('invisible');
-	location.reload();
-	addNote();
 });
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
 	const getAllNotes = async function () {
 		try {
 			const response = await fetch('http://localhost:8088/notes/all', {
@@ -78,11 +81,41 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	};
 
+	let currentNotes = [];
+
+	const sortByOldest = notes => {
+		return notes.sort((a, b) => new Date(a.date) - new Date(b.date));
+	};
+
+	const sortByNewest = notes => {
+		return notes.sort((a, b) => new Date(b.date) - new Date(a.date));
+	};
+
 	getAllNotes().then(notes => {
 		if (notes) {
-			showNote(notes);
+			currentNotes = notes.notes;
+			const sortedNotes = sortByNewest(currentNotes);
+			showNote({ notes: sortedNotes });
 		}
 	});
+
+	fromOldestBtn.addEventListener('click', function () {
+		const sortedNotes = sortByOldest(currentNotes);
+		clearNotes();
+		showNote({ notes: sortedNotes });
+	});
+
+	fromNewestBtn.addEventListener('click', function () {
+		const sortedNotes = sortByNewest(currentNotes);
+		clearNotes();
+		showNote({ notes: sortedNotes });
+	});
+
+	const clearNotes = () => {
+		while (divNotes.firstChild) {
+			divNotes.removeChild(divNotes.firstChild);
+		}
+	};
 });
 
 document.getElementById('divNotes').addEventListener('click', function (e) {
@@ -94,11 +127,12 @@ document.getElementById('divNotes').addEventListener('click', function (e) {
 	}
 
 	if (e.target && e.target.matches('.edit_note--btn img')) {
-		const editButton = e.target.closest('button'); // Pobierz przycisk edycji
+		const editButton = e.target.closest('button');
 		const noteId = editButton.getAttribute('data-noteId');
 		const noteTitle = editButton.getAttribute('data-noteTitle');
 		const noteWeight = editButton.getAttribute('data-noteWeight');
 		const noteText = editButton.getAttribute('data-noteText');
+		const updateAtr = updatedNoteBtn.setAttribute('data-noteId', noteId);
 
 		document.getElementById('input_editTitle').value = noteTitle;
 		document.getElementById('input_editWeight').value = noteWeight;
@@ -109,9 +143,21 @@ document.getElementById('divNotes').addEventListener('click', function (e) {
 	}
 });
 
-// updatedNoteBtn.addEventListener('click', function (e) {
-// 	e.preventDefault();
-// });
+updatedNoteBtn.addEventListener('click', function (e) {
+	e.preventDefault();
+	const noteTitle = document.getElementById('input_editTitle').value;
+	const noteWeight = document.getElementById('input_editWeight').value;
+	const noteContent = document.getElementById('input_editNoteText').value;
+	const editButton = document.getElementById('edit_note--btn');
+	const noteId = updatedNoteBtn.getAttribute('data-noteId');
+
+	updateNote(noteId, noteTitle, noteContent, noteWeight);
+	updatedNoteBtn.removeAttribute('data-noteId');
+	editModal.classList.remove('visible');
+	editModal.classList.add('invisible');
+
+	location.reload();
+});
 
 logOutBtns.forEach(btn => btn.addEventListener('click', logOut));
 

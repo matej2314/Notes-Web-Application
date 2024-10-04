@@ -19,7 +19,7 @@ export const showNote = function (notes) {
 		h4Weight.textContent = `Priorytet: ${note.weight}`;
 
 		const pNote = document.createElement('p');
-		pNote.setAttribute('style', 'width: 100%; font-family: "Shantell Sans", cursive; font-size: 1.5rem; margin-left: 0.5rem;');
+		pNote.setAttribute('style', 'width: 100%; font-family: "Shantell Sans", cursive; font-size: 1.5rem; margin-left: 0.5rem; text-wrap: wrap;');
 		pNote.textContent = note.note;
 
 		const iconsContainer = document.createElement('div');
@@ -72,13 +72,13 @@ export const showNote = function (notes) {
 
 export const updateNote = async function (noteId, noteTitle, noteContent, noteWeight) {
 	try {
-		const response = await fetch('http://localhost:8088/edit', {
+		const response = await fetch('http://localhost:8088/notes/edit', {
 			method: 'PUT',
 			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ noteId, noteTitle, noteContent, noteWeight }),
+			body: JSON.stringify({ noteId: noteId, notetitle: noteTitle, notetext: noteContent, noteWeight: noteWeight }),
 		});
 
 		if (!response.ok) {
@@ -88,11 +88,10 @@ export const updateNote = async function (noteId, noteTitle, noteContent, noteWe
 		}
 
 		const updatedNote = await response.json();
-		return updateNote;
+		return updatedNote;
 	} catch (error) {
 		if (error) {
 			console.log('Błąd aktualizacji notatki:', error.message);
-			alert('Błąd aktualizacji notatki');
 		}
 	}
 };

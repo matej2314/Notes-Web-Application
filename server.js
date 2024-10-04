@@ -29,13 +29,11 @@ app.use(favicon(path.join(__dirname, './public/images', 'favicon.ico')));
 const indexRoutes = require('./src/backend/routes/pages.js');
 const notesRoutes = require('./src/backend/routes/notesRoutes.js');
 const authRoutes = require('./src/backend/routes/auth.js');
+
 app.use('/notes', notesRoutes);
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 
-// app.get('/generate-pdf', generatePDF);
-
-// Uruchomienie serwera
 app.listen(port, () => {
 	console.log(`SERVER LISTENING ON PORT ${port}`);
 });

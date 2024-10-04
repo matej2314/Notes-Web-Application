@@ -80,7 +80,7 @@ exports.loginUser = async (req, res) => {
 				return res.status(400).json({ message: 'Niepoprawny login lub hasło' });
 			}
 
-			const token = jwt.sign({ id: user.id, username: username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+			const token = jwt.sign({ id: user.id, username: username }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
 			// Ustaw ciasteczko
 			res.cookie('SESSID', token, jwtCookieOptions);

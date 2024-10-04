@@ -93,6 +93,28 @@ router.get('/all', verifyJWT, (req, res) => {
 	});
 });
 
+router.put('/edit', verifyJWT, (req, res) => {
+	const noteId = req.body.noteId;
+	const noteTitle = req.body.notetitle;
+	const noteContent = req.body.notetext;
+	const noteWeight = req.body.noteWeight;
+	const userId = req.userId;
+
+	if (!noteId || !noteContent || noteContent.trim() === '') {
+		return res.status(400).json({ message: 'Niepoprawne dane' });
+	}
+
+	const sqlQuery = 'UPDATE notes SET title = ?, note = ?, weight = ? WHERE id = ? AND user_id = ?';
+
+	connection.query(sqlQuery, [noteTitle, noteContent, noteWeight, noteId, userId], (err, result) => {
+		if (err) {
+			console.error('Błąd podczas aktualizacji notatki', err.message);
+			return res.status(500).json({ message: 'Błąd serwera' });
+		}
+		return res.status(200).json({ message: 'Notatka zaktualizowana' });
+	});
+});
+
 router.delete('/delete', verifyJWT, (req, res) => {
 	const userId = req.userId;
 	const noteId = req.body.noteId;
@@ -116,26 +138,6 @@ router.delete('/delete', verifyJWT, (req, res) => {
 	});
 });
 
-router.put('/edit', verifyJWT, (req, res) => {
-	const noteId = req.body.noteId;
-	const noteTitle = req.body.notetitle;
-	const noteContent = req.body.notetext;
-	const noteWeight = req.body.noteWeight;
-	const userId = req.userId;
-
-	if (!noteId || !noteContent || noteContent.trim() === '') {
-		return res.status(400).send('Niepoprawne dane');
-	}
-
-	const sqlQuery = 'UPDATE notes SET title=?, note=? weight=? WHERE id=? AND user_id=?';
-
-	connection.query(sqlQuery, [noteTitle, noteContent, noteWeight, noteId, userId], (err, result) => {
-		if (err) {
-			console.error('Błąd podczas aktualizacji notatki', err.message);
-			return res.status(500).send('Błąd serwera');
-		}
-		return res.status(200).json({ row: row[-1] });
-	});
-});
+// router.get('/generate-pdf', verifyJWT, generatePDF);
 
 module.exports = router;
