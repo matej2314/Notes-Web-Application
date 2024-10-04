@@ -138,6 +138,6 @@ router.delete('/delete', verifyJWT, (req, res) => {
 	});
 });
 
-// router.get('/generate-pdf', verifyJWT, generatePDF);
+router.post('/generate-pdf', verifyJWT, generatePDF);
 
 module.exports = router;

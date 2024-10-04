@@ -19,13 +19,11 @@ app.use(
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware do obsługi danych z formularzy i JSON
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(favicon(path.join(__dirname, './public/images', 'favicon.ico')));
 
-// Ścieżki do innych funkcji
 const indexRoutes = require('./src/backend/routes/pages.js');
 const notesRoutes = require('./src/backend/routes/notesRoutes.js');
 const authRoutes = require('./src/backend/routes/auth.js');
@@ -36,4 +34,11 @@ app.use('/', authRoutes);
 
 app.listen(port, () => {
 	console.log(`SERVER LISTENING ON PORT ${port}`);
+});
+
+// Obsługuje sygnały SIGINT (np. Ctrl+C)
+process.on('SIGINT', () => {
+	server.close(() => {
+		process.exit(0); // Zakończ proces
+	});
 });

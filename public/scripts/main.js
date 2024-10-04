@@ -83,33 +83,27 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 	let currentNotes = [];
 
-	const sortByOldest = notes => {
-		return notes.sort((a, b) => new Date(a.date) - new Date(b.date));
+	const sortNotes = (notes, order) => {
+		return notes.sort((a, b) => new Date(order === 'newest' ? b.date : a.date) - new Date(order === 'newest' ? a.date : b.date));
 	};
 
-	const sortByNewest = notes => {
-		return notes.sort((a, b) => new Date(b.date) - new Date(a.date));
-	};
-
-	getAllNotes().then(notes => {
+	const loadNotes = async () => {
+		const notes = await getAllNotes();
 		if (notes) {
 			currentNotes = notes.notes;
-			const sortedNotes = sortByNewest(currentNotes);
-			showNote({ notes: sortedNotes });
+			showNote({ notes: sortNotes(currentNotes, 'newest') });
 		}
-	});
+	};
 
-	fromOldestBtn.addEventListener('click', function () {
-		const sortedNotes = sortByOldest(currentNotes);
-		clearNotes();
-		showNote({ notes: sortedNotes });
-	});
+	loadNotes();
 
-	fromNewestBtn.addEventListener('click', function () {
-		const sortedNotes = sortByNewest(currentNotes);
+	const updateNotes = order => {
 		clearNotes();
-		showNote({ notes: sortedNotes });
-	});
+		showNote({ notes: sortNotes(currentNotes, order) });
+	};
+
+	fromOldestBtn.addEventListener('click', () => updateNotes('oldest'));
+	fromNewestBtn.addEventListener('click', () => updateNotes('newest'));
 
 	const clearNotes = () => {
 		while (divNotes.firstChild) {
@@ -141,6 +135,16 @@ document.getElementById('divNotes').addEventListener('click', function (e) {
 		editModal.classList.remove('invisible');
 		editModal.classList.add('visible');
 	}
+
+	if (e.target.matches('.pdf_note--btn img')) {
+		const pdfBtn = e.target.closest('button');
+		const noteId = pdfBtn.getAttribute('data-noteId');
+		const noteTitle = pdfBtn.getAttribute('data-noteTitle');
+		const noteDate = pdfBtn.getAttribute('data-notedate');
+		const noteText = pdfBtn.getAttribute('data-noteText');
+
+		getPDF(noteId, noteTitle, noteText, noteDate);
+	}
 });
 
 updatedNoteBtn.addEventListener('click', function (e) {
@@ -148,10 +152,10 @@ updatedNoteBtn.addEventListener('click', function (e) {
 	const noteTitle = document.getElementById('input_editTitle').value;
 	const noteWeight = document.getElementById('input_editWeight').value;
 	const noteContent = document.getElementById('input_editNoteText').value;
-	const editButton = document.getElementById('edit_note--btn');
 	const noteId = updatedNoteBtn.getAttribute('data-noteId');
 
 	updateNote(noteId, noteTitle, noteContent, noteWeight);
+
 	updatedNoteBtn.removeAttribute('data-noteId');
 	editModal.classList.remove('visible');
 	editModal.classList.add('invisible');

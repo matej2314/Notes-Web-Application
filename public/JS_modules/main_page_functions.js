@@ -1,34 +1,43 @@
-'use strict';
+import { formDate } from './formFunctions.js';
+
+('use strict');
 
 export const showNote = function (notes) {
 	const divNotes = document.getElementById('divNotes');
 
 	notes.notes.forEach(note => {
+		const newDate = formDate(new Date(note.date));
+
 		const div = document.createElement('div');
 		div.className = 'note-container';
 
 		const backgroundColor = note.weight < 2 ? '#ffffa2' : '#ff7ecd';
-		div.setAttribute('style', `background-color: ${backgroundColor}; height: fit-content; width: 25%; display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px 15px; margin-left: 10px; margin-top: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);`);
+		div.setAttribute('style', `background-color: ${backgroundColor}; height: fit-content; width: 25%; display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px 15px; margin: 15px 0 0 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);`);
 
 		const h2Title = document.createElement('h2');
-		h2Title.setAttribute('style', 'width: 100%; font-family: "Shantell Sans", cursive; text-align: center;');
+		h2Title.setAttribute('style', 'width: 100%; font-family: "Shantell Sans", cursive; text-align: center; text-decoration: underline;');
 		h2Title.textContent = note.title;
 
+		const dateheader = document.createElement('h2');
+		dateheader.setAttribute('style', 'width: 100%; font-family: "Shantell Sans"; text-align: center; margin-bottom: 2px;');
+		dateheader.textContent = `Utworzona dnia: ${newDate}`;
+
 		const h4Weight = document.createElement('h4');
-		h4Weight.setAttribute('style', 'width: 100%; font-family: "Roboto", sans-serif; font-size: 0.875rem; text-align: center;');
+		h4Weight.setAttribute('style', 'width: 100%; font-family: "Roboto", sans-serif; font-size: 0.875rem; text-align: center; margin-bottom: 2px;');
 		h4Weight.textContent = `Priorytet: ${note.weight}`;
 
 		const pNote = document.createElement('p');
-		pNote.setAttribute('style', 'width: 100%; font-family: "Shantell Sans", cursive; font-size: 1.5rem; margin-left: 0.5rem; text-wrap: wrap;');
+		pNote.setAttribute('style', 'width: 100%; font-family: Shantell Sans", cursive; font-size: 1rem; margin-left: 0.5rem; text-align: justify;');
 		pNote.textContent = note.note;
 
 		const iconsContainer = document.createElement('div');
 		iconsContainer.setAttribute('style', 'width: 100%; display: flex; justify-content: flex-end; margin-top: 1rem;');
 
 		const pdfBtn = document.createElement('button');
+		pdfBtn.classList.add('pdf_note--btn');
 		pdfBtn.setAttribute('data-noteId', note.id);
 		pdfBtn.setAttribute('data-noteTitle', note.title);
-		pdfBtn.setAttribute('data-noteWeight', note.weight);
+		pdfBtn.setAttribute('data-notedate', newDate);
 		pdfBtn.setAttribute('data-noteText', note.note);
 		const pdfImg = document.createElement('img');
 		pdfImg.src = '../images/pdf-file.png';
@@ -62,6 +71,7 @@ export const showNote = function (notes) {
 		iconsContainer.appendChild(deleteBtn);
 
 		div.appendChild(h2Title);
+		div.appendChild(dateheader);
 		div.appendChild(h4Weight);
 		div.appendChild(pNote);
 		div.appendChild(iconsContainer);
