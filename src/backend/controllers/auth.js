@@ -22,25 +22,35 @@ exports.registerUser = async (req, res) => {
 			return res.status(400).send('Proszę uzupełnić wszystkie pola!');
 		}
 
-		const existingUser = await connection.query('SELECT email FROM users WHERE email = ?', [reg_email]);
+		connection.query('SELECT email FROM users WHERE email = ?', [reg_email], async (error, results) => {
+			if (error) {
+				return res.status(500).send('Błąd serwera');
+			}
 
-		if (existingUser.length > 0) {
-			return res.status(400).send('Ten adres e-mail jest już zarejestrowany!');
-		}
+			if (results.length > 0) {
+				return res.status(400).send('Ten adres e-mail jest już zarejestrowany!');
+			}
 
-		let hashedPasswd = await bcrypt.hash(reg_password, 10);
-		const userId = uuidv4();
+			try {
+				let hashedPasswd = await bcrypt.hash(reg_password, 10);
 
-		await connection.query('INSERT INTO users SET ?', {
-			id: userId,
-			name: reg_username,
-			email: reg_email,
-			password: hashedPasswd,
+				const userId = uuidv4();
+
+				connection.query('INSERT INTO users SET ?', { id: userId, name: reg_username, email: reg_email, password: hashedPasswd }, (error, results) => {
+					if (error) {
+						return res.status(500).send('Błąd serwera');
+					}
+
+					const token = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '1h' });
+					res.cookie('SESSID', token, jwtCookieOptions);
+
+					res.status(200).json({ message: 'Użytkownik zarejestrowany pomyślnie. Możesz się zalogować!' });
+				});
+			} catch (err) {
+				return res.status(500).send('Błąd serwera');
+			}
 		});
-
-		res.status(200).json({ message: 'Użytkownik zarejestrowany pomyślnie. Możesz się zalogować!' });
 	} catch (err) {
-		console.error('Błąd serwera:', err);
 		return res.status(500).send('Błąd serwera');
 	}
 };
@@ -52,49 +62,36 @@ exports.loginUser = async (req, res) => {
 		return res.status(400).json({ message: 'Proszę uzupełnić wszystkie pola!' });
 	}
 
-	try {
-		// Zapytanie o użytkownika w bazie danych
-		connection.query('SELECT * FROM users WHERE name = ?', [username], async (error, results) => {
-			if (error) {
-				console.log('Błąd przy zapytaniu do bazy:', error);
-				return res.status(500).json({ message: 'Błąd serwera' });
-			}
+	connection.query('SELECT * FROM users WHERE name=?', [username], async (error, results) => {
+		if (error) {
+			console.log(error);
+			return res.status(500).json({ message: 'Błąd serwera' });
+		}
 
-			// Sprawdzenie, czy użytkownik istnieje
-			if (results.length === 0) {
-				return res.status(400).json({ message: 'Niepoprawny login lub hasło.' });
-			}
+		if (results.length === 0) {
+			return res.status(400).json({ message: 'Niepoprawny login lub hasło.' });
+		}
 
-			const user = results[0];
+		const user = results[0];
 
-			// Debug: Wyświetlanie hasła
-			console.log('Hasło użytkownika:', userpassword);
-			console.log('Hasło w bazie:', user.password);
-
-			// Sprawdzenie hasła
+		try {
 			const isMatch = await bcrypt.compare(userpassword, user.password);
-			console.log('Wynik porównania haseł:', isMatch); // Dodaj log
-
 			if (!isMatch) {
 				return res.status(400).json({ message: 'Niepoprawny login lub hasło' });
 			}
 
-			// Generowanie tokenu
 			const token = jwt.sign({ id: user.id, username: username }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
+			// Ustaw ciasteczko
 			res.cookie('SESSID', token, jwtCookieOptions);
 
-			return res.status(200).json({
-				message: 'Zalogowano pomyślnie',
-				redirectUrl: 'http://localhost:8088/main',
-				username: user.name,
-				userId: user.id,
-			});
-		});
-	} catch (error) {
-		console.log('Błąd podczas logowania:', error);
-		return res.status(500).json({ message: 'Błąd serwera' });
-	}
+			// Przekieruj użytkownika do strony głównej
+			return res.status(200).json({ message: 'Zalogowano pomyślnie', redirectUrl: 'http://localhost:8088/main', username: user.name, userId: user.id });
+		} catch (bcryptError) {
+			console.log('Wprowadź dane ponownie.', bcryptError);
+			return res.status(500).json({ message: 'Błąd serwera' });
+		}
+	});
 };
 
 exports.logoutUser = (req, res) => {
