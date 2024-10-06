@@ -36,9 +36,14 @@ app.listen(port, () => {
 	console.log(`SERVER LISTENING ON PORT ${port}`);
 });
 
-// Obsługuje sygnały SIGINT (np. Ctrl+C)
-process.on('SIGINT', () => {
-	server.close(() => {
-		process.exit(0); // Zakończ proces
-	});
-});
+// process.on('SIGTERM', () => {
+// 	server.close(() => {
+// 		console.log('Proces zakończony');
+// 	});
+// });
+
+// process.on('SIGINT', () => {
+// 	server.close(() => {
+// 		console.log('Aplikacja została przerwana');
+// 	});
+// });

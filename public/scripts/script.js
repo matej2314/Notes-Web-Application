@@ -21,13 +21,12 @@ btnLogin.addEventListener('click', function () {
 
 // Funkcja walidująca hasło
 function isValidPassword(password) {
-	const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[!@#$%^*\-+=\[\]{};':"\\,.?~]).{10,30}$/;
+	const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d!#*$<>:]{10,30}$/;
 	return regex.test(password);
 }
-
 // Funkcja sanitizująca input (usuwanie niebezpiecznych znaków)
 function sanitizeInput(input) {
-	return input.replace(/[^a-zA-Z0-9]/g, '');
+	return input.replace(/[^a-zA-Z0-9!#*?]/g, ''); // Pozwala na !, #, *, ?
 }
 
 btns.forEach(btn =>
@@ -44,7 +43,7 @@ btnSubmit.addEventListener('click', async function (e) {
 	const userpassword = passwdInput.value;
 
 	// Logowanie danych przed wysłaniem
-	console.log('Dane do przesłania:', { username: sanitizedUsername, userpassword: userpassword });
+	console.log('Dane do przesłania:', { username: loginInput.value, userpassword: userpassword });
 
 	// Walidacja hasła
 	if (!isValidPassword(passwdInput.value)) {
@@ -63,7 +62,7 @@ btnSubmit.addEventListener('click', async function (e) {
 		});
 
 		// Logowanie statusu odpowiedzi
-		console.log('Status odpowiedzi serwera:', response.status);
+		console.log('Status odpowiedzi serwera:', response.body);
 
 		if (response.ok) {
 			// Odczytanie odpowiedzi tylko raz

@@ -1,5 +1,6 @@
 const addNoteForm = document.getElementById('addNote--form');
 const editNoteForm = document.getElementById('editNote--form');
+const delnoteModal = document.getElementById('del_Note--modal');
 
 export const showAddForm = function () {
 	addNoteForm.classList.remove('invisible');
@@ -19,6 +20,32 @@ export const closeEditForm = function () {
 	closeEditForm.addEventListener('click', function () {
 		editNoteForm.classList.remove('visible');
 		editNoteForm.classList.add('invisible');
+	});
+};
+
+export const showDelModal = function () {
+	delnoteModal.classList.remove('invisible');
+	delnoteModal.classList.add('visible');
+};
+
+export const hideDelModal = function () {
+	delnoteModal.classList.remove('visible');
+	delnoteModal.classList.add('invisible');
+};
+
+export const MailForm = function () {
+	const changeMailBtn = document.getElementById('change_userMail--btn');
+	const changeMailForm = document.getElementById('change_userMail--form');
+	const closeMailFormBtn = document.getElementById('closeMailForm--btn');
+
+	changeMailBtn.addEventListener('click', function () {
+		changeMailForm.classList.toggle('invisible');
+		changeMailForm.classList.toggle('visible');
+	});
+
+	closeMailFormBtn.addEventListener('click', function () {
+		changeMailForm.classList.remove('visible');
+		changeMailForm.classList.add('invisible');
 	});
 };
 

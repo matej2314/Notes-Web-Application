@@ -42,11 +42,10 @@ regEmail.addEventListener('input', event => {
 	}
 });
 
+// Zaktualizowana funkcja sanitizeInput
 function sanitizeInput(input) {
-	return input.replace(/[^a-z0-9@.]/gi, '');
-}
-function isAlphaNumeric(input) {
-	return /^[a-z0-9]+$/i.test(input);
+	// Zachowaj znaki alfanumeryczne oraz @, ., *, #, !
+	return input.replace(/[^a-z0-9@.*#!]/gi, '');
 }
 
 function containsDangCharacters(input) {
@@ -77,6 +76,7 @@ regSubmit.addEventListener('click', async function (e) {
 	if (processInput()) {
 		if (regPass.value !== repRegPass.value) {
 			alert('Hasła muszą być identyczne!');
+			return;
 		}
 
 		try {

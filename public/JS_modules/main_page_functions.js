@@ -12,7 +12,7 @@ export const showNote = function (notes) {
 		div.className = 'note-container';
 
 		const backgroundColor = note.weight < 2 ? '#ffffa2' : '#ff7ecd';
-		div.setAttribute('style', `background-color: ${backgroundColor}; height: fit-content; width: 25%; display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px 15px; margin: 15px 0 0 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);`);
+		div.setAttribute('style', `background-color: ${backgroundColor}; height: fit-content; width: 25%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px 15px; margin: 15px 0 0 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);`);
 
 		const h2Title = document.createElement('h2');
 		h2Title.setAttribute('style', 'width: 100%; font-family: "Shantell Sans", cursive; text-align: center; text-decoration: underline;');
@@ -27,7 +27,7 @@ export const showNote = function (notes) {
 		h4Weight.textContent = `Priorytet: ${note.weight}`;
 
 		const pNote = document.createElement('p');
-		pNote.setAttribute('style', 'width: 100%; font-family: Shantell Sans", cursive; font-size: 1rem; margin-left: 0.5rem; text-align: justify;');
+		pNote.setAttribute('style', 'width: 100%; font-family: Shantell Sans", cursive; font-size: 1rem; margin-left: 0.5rem; text-align: left; text-wrap: wrap;');
 		pNote.textContent = note.note;
 
 		const iconsContainer = document.createElement('div');
@@ -80,6 +80,18 @@ export const showNote = function (notes) {
 	});
 };
 
+const divNotestyle = () => {
+	const divNote = document.getElementById('divNotes');
+
+	if (divNote.childElementCount < 2 || divNote.childElementCount === 2) {
+		divNote.classList.remove('justify-between');
+		divNote.classList.add('justify-start');
+	} else {
+		divNote.classList.add('justify-between');
+	}
+};
+divNotestyle();
+
 export const updateNote = async function (noteId, noteTitle, noteContent, noteWeight) {
 	try {
 		const response = await fetch('http://localhost:8088/notes/edit', {
@@ -130,27 +142,6 @@ export const deleteNote = async function (noteId, noteElement) {
 		if (error) {
 			console.log('Wystąpił błąd:', error.message);
 			alert('Nie udało się usunąć notatki');
-		}
-	}
-};
-
-export const logOut = async function (req, res) {
-	try {
-		const response = await fetch('http://localhost:8088/logout', {
-			method: 'POST',
-			credentials: 'include',
-		});
-
-		if (response.ok) {
-			alert('Wylogowano pomyślnie!');
-			window.location.href = '/';
-		} else {
-			alert('Wylogowanie nie powiodło się');
-		}
-	} catch (error) {
-		if (error) {
-			console.log('Wystąpił błąd:', error.message);
-			alert('Wystąpił błąd podczas wylogowywania.');
 		}
 	}
 };

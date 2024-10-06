@@ -59,13 +59,13 @@ exports.loginUser = async (req, res) => {
 	const { username, userpassword } = req.body;
 
 	if (!username || !userpassword) {
-		return res.status(400).json({ message: 'Proszę uzupełnić wszystkie pola!' });
+		return res.status(400).json({ message: 'Proszę uzupełnić wszystkie pola.' });
 	}
 
-	connection.query('SELECT * FROM users WHERE name=?', [username], async (error, results) => {
+	connection.query('SELECT * FROM users WHERE name = ?', [username], async (error, results) => {
 		if (error) {
-			console.log(error);
-			return res.status(500).json({ message: 'Błąd serwera' });
+			console.log('Błąd SELECT:', error.message);
+			return res.status(500).json({ message: 'Błąd serwera', error: error.message });
 		}
 
 		if (results.length === 0) {
@@ -74,23 +74,17 @@ exports.loginUser = async (req, res) => {
 
 		const user = results[0];
 
-		try {
-			const isMatch = await bcrypt.compare(userpassword, user.password);
-			if (!isMatch) {
-				return res.status(400).json({ message: 'Niepoprawny login lub hasło' });
-			}
+		const isMatch = await bcrypt.compare(userpassword, user.password);
 
-			const token = jwt.sign({ id: user.id, username: username }, process.env.JWT_SECRET, { expiresIn: '24h' });
-
-			// Ustaw ciasteczko
-			res.cookie('SESSID', token, jwtCookieOptions);
-
-			// Przekieruj użytkownika do strony głównej
-			return res.status(200).json({ message: 'Zalogowano pomyślnie', redirectUrl: 'http://localhost:8088/main', username: user.name, userId: user.id });
-		} catch (bcryptError) {
-			console.log('Wprowadź dane ponownie.', bcryptError);
-			return res.status(500).json({ message: 'Błąd serwera' });
+		if (!isMatch) {
+			return res.status(400).json({ message: 'Niepoprawny login lub hasło.' });
 		}
+
+		const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+		res.cookie('SESSID', token, jwtCookieOptions);
+
+		res.status(200).json({ message: 'Zalogowano pomyślnie.', username: user.name, redirectUrl: '/main' });
 	});
 };
 
@@ -100,7 +94,8 @@ exports.logoutUser = (req, res) => {
 };
 
 exports.changeEmail = (req, res) => {
-	const { userId, username, email, newEmail } = req.body;
+	const userId = req.body;
+	const { username, email, newEmail } = req.body;
 
 	if (!userId || !newEmail || !username || !email) {
 		return res.status(400).send('Podaj prawidłowe dane');
@@ -115,7 +110,7 @@ exports.changeEmail = (req, res) => {
 			return res.status(400).send('Ten adres e-mail jest już zarejestrowany!');
 		}
 
-		connection.query('SELECT id FROM users WHERE name=? AND email=?', [username, email], async (error, results) => {
+		connection.query('SELECT id FROM users WHERE id=? name=? AND email=?', [userId, username, email], async (error, results) => {
 			if (error) {
 				return res.status(500).send('Błąd serwera');
 			}
@@ -124,7 +119,6 @@ exports.changeEmail = (req, res) => {
 				return res.status(400).send('Podano nieprawidłowe dane użytkownika');
 			}
 
-			const userId = results[0].id;
 			connection.query('UPDATE users SET email=? WHERE id=?', [newEmail, userId], async updateError => {
 				if (updateError) {
 					console.log('Błąd aktualizacji adresu e-mail', updateError);

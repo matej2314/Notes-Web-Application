@@ -1,5 +1,6 @@
-import { showNote, logOut, deleteNote, updateNote } from '../JS_modules/main_page_functions.js';
-import { showAddForm, closeAddForm, closeEditForm } from '../JS_modules/formFunctions.js';
+import { showNote, deleteNote, updateNote } from '../JS_modules/main_page_functions.js';
+import { logOut, changeEmailFr } from '../JS_modules/user_functions.js';
+import { showAddForm, closeAddForm, closeEditForm, MailForm, showDelModal, hideDelModal } from '../JS_modules/formFunctions.js';
 import { getPDF } from '../JS_modules/downloadPDF.js';
 
 const logOutBtns = document.querySelectorAll('.logOutBtn');
@@ -12,6 +13,9 @@ const editModal = document.getElementById('editNote--form');
 const updatedNoteBtn = document.getElementById('sendNewNote--btn');
 const fromNewestBtn = document.getElementById('fromNewest--btn');
 const fromOldestBtn = document.getElementById('fromOldest--btn');
+const changeEmailBtn = document.getElementById('sendNewEmail--btn');
+const delNoteConfirm = document.getElementById('del_Note--btnyes');
+const delNoteDeny = document.getElementById('del_Note--btnno');
 
 const addNote = async function () {
 	const noteTitleValue = noteTitle.value;
@@ -114,10 +118,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 document.getElementById('divNotes').addEventListener('click', function (e) {
 	if (e.target && e.target.matches('.del_note--btn img')) {
-		const noteId = e.target.closest('button').getAttribute('data-noteId');
-		const noteElement = e.target.closest('.note-container');
+		showDelModal();
+		delNoteConfirm.addEventListener('click', function () {
+			const noteId = e.target.closest('button').getAttribute('data-noteId');
+			const noteElement = e.target.closest('.note-container');
 
-		deleteNote(noteId, noteElement);
+			deleteNote(noteId, noteElement);
+			hideDelModal();
+		});
+
+		delNoteDeny.addEventListener('click', hideDelModal);
 	}
 
 	if (e.target && e.target.matches('.edit_note--btn img')) {
@@ -132,8 +142,8 @@ document.getElementById('divNotes').addEventListener('click', function (e) {
 		document.getElementById('input_editWeight').value = noteWeight;
 		document.getElementById('input_editNoteText').value = noteText;
 
-		editModal.classList.remove('invisible');
-		editModal.classList.add('visible');
+		editModal.classList.toggle('invisible');
+		editModal.classList.toggle('visible');
 	}
 
 	if (e.target.matches('.pdf_note--btn img')) {
@@ -163,9 +173,15 @@ updatedNoteBtn.addEventListener('click', function (e) {
 	location.reload();
 });
 
+changeEmailBtn.addEventListener('click', function (e) {
+	e.preventDefault();
+	changeEmailFr();
+});
+
 logOutBtns.forEach(btn => btn.addEventListener('click', logOut));
 
 addNoteBtns.forEach(btn => btn.addEventListener('click', showAddForm));
 
 closeAddForm();
 closeEditForm();
+MailForm();
