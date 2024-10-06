@@ -1,5 +1,5 @@
 const addNoteForm = document.getElementById('addNote--form');
-const editNoteForm = document.getElementById('editNote--form');
+const editModal = document.getElementById('editNote--form');
 const delnoteModal = document.getElementById('del_Note--modal');
 
 export const showAddForm = function () {
@@ -18,8 +18,8 @@ export const closeAddForm = function () {
 export const closeEditForm = function () {
 	const closeEditForm = document.getElementById('closeEditForm--btn');
 	closeEditForm.addEventListener('click', function () {
-		editNoteForm.classList.remove('visible');
-		editNoteForm.classList.add('invisible');
+		editModal.classList.toggle('visible');
+		editModal.classList.toggle('invisible');
 	});
 };
 

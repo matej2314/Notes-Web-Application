@@ -19,4 +19,6 @@ router.get('/main', verifyJWT, (req, res) => {
 	res.sendFile(path.join(__dirname, '../../../public/html', 'main_page.html'));
 });
 
+router.post('/upload', verifyJWT, (req, res) => {});
+
 module.exports = router;

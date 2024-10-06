@@ -39,7 +39,7 @@
     </header>
     <div id="change_userMail--form" class="w-1/4 h-fit fixed top-50% left-50%  flex flex-col justify-start items-center z-10 border-4 border-white pt-2 px-5 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg invisible">
         <button id="closeMailForm--btn" class="absolute w-full h-fit flex flex-row justify-end"><img src="../images/cross.png" alt="exit" class="relative top-0 right-2" /></button>
-        <h2 class="w-full h-full text-xl flex flex-row justify-center mb-5 mt-5">Zmiana adresu e-mail:</h2>
+        <h2 class="w-full h-full text-xl flex flex-row justify-center my-5">Zmiana adresu e-mail:</h2>
         <form action="" class="w-3/4 h-full flex flex-col justify-center">
             <label for="name_change--input" id="name_change--label" class="mb-2">Wprowadź nazwę użytkownika:</label>
             <input type="text" id="name_change--input" name="name" class="text-stone-950 border-2 border-stone-950 mb-2" />
@@ -49,6 +49,12 @@
             <input type="email" id="new_userMail--input" name="new_userMail--input" class="text-stone-950 border-2 border-stone-950 mb-2" />
             <input type="submit" value="Zmień e-mail" id="sendNewEmail--btn" class="mt-5 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" />
         </form>
+    </div>
+    <div id="add_userAvatar--form" class="w-fit h-fit fixed top-50% left-50%  flex flex-col justify-start items-center z-10 border-4 border-white pt-2 px-5 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg invisible">
+        <h2 class="w-full h-fit text-xl flex flex-row justify-center my-5">Dodaj swój avatar</h2>
+        <label for="add_userAvatar--input" id="add_userAvatar--label" class="mb-5">Wybierz plik (wyłącznie format .png, .jpg, .jpeg)</label>
+        <input type="file" accept=".jpg, .png, .jpeg" name="add_userAvatar--input" id="add_userAvatar--input" class="mb-5" />
+        <input type="submit" id="add_userAvatar--save__btn" class="mt-5 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" value="Zapisz" />
     </div>
     <div class="w-3/4 h-fit flex flex-row  justify-stretch main_container m-0 p-0">
         <div id="editNote--form" class="w-2/4 h-fit fixed top-0 left-0 translate-x-2/4 translate-y-2/4 flex flex-col justify-start items-center z-10 border-4 border-white pt-1 px-5 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg invisible">
@@ -100,9 +106,9 @@
         <div id="userProfile--cont" class="w-3/12 border-2 border-stone-950 rounded-tr-lg flex flex-col items-center bg-[#dcecf5]">
             <h2 class="w-full h-fit flex flex-row justify-center underline decoration-solid text-lg font-semibold ">Twój profil:</h2>
             <div id="profile_img--cont" class="w-28 h-28 mt-3 border-2 flex flex-row justify-self-center border-stone-950 rounded-full overflow-hidden">
+                <button type="button" id="add_userAvatar" class="add_userAvatar">Dodaj swój avatar</button>
             </div>
             <ul class=" w-full h-fit mt-5 flex flex-col align-center ">
-                <li><button id="add_userAvatar">Dodaj swój avatar</button></li>
                 <li><button class="addnote">Dodaj notatkę</button></li>
                 <li><button id="change_userMail--btn">Zmień adres e-mail</button></li>
                 <li><button>Zmień hasło</button></li>
@@ -110,6 +116,7 @@
             </ul>
         </div>
     </div>
+
     <div id="footer--cont" class="w-3/4 h-fit border-2 border-stone-950 flex flex-row justify-center rounded-bl-lg rounded-br-lg footer_container bg-[#9abdcd]">
         <h2 class="h-fit w-fit font-roboto font-medium py-2">Copyright@Mateusz Śliwowski - mateo2314</h2>
     </div>

@@ -1,6 +1,7 @@
 import { showNote, deleteNote, updateNote } from '../JS_modules/main_page_functions.js';
 import { logOut, changeEmailFr } from '../JS_modules/user_functions.js';
 import { showAddForm, closeAddForm, closeEditForm, MailForm, showDelModal, hideDelModal } from '../JS_modules/formFunctions.js';
+import { showAvatarForm } from '../JS_modules/avatar_functions.js';
 import { getPDF } from '../JS_modules/downloadPDF.js';
 
 const logOutBtns = document.querySelectorAll('.logOutBtn');
@@ -57,8 +58,7 @@ const addNote = async function () {
 saveNoteBtn.addEventListener('click', function (e) {
 	e.preventDefault();
 	addNote();
-	addNoteForm.classList.remove('visible');
-	addNoteForm.classList.add('invisible');
+	closeAddForm();
 });
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -185,3 +185,4 @@ addNoteBtns.forEach(btn => btn.addEventListener('click', showAddForm));
 closeAddForm();
 closeEditForm();
 MailForm();
+showAvatarForm();
