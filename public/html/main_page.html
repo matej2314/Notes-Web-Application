@@ -51,8 +51,9 @@
         </form>
     </div>
     <div id="add_userAvatar--form" class="w-fit h-fit fixed top-50% left-50%  flex flex-col justify-start items-center z-10 border-4 border-white pt-2 px-5 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg invisible">
+        <button id="close_Avatar--form" class="w-full h-fit flex flex-row justify-end"><img src="../images/cross.png" alt="zamknij formularz dodawania avatara" class="relative  left-2"></button>
         <h2 class="w-full h-fit text-xl flex flex-row justify-center my-5">Dodaj swój avatar</h2>
-        <form action="http://localhost:8088/upload" enctype="multipart/form-data" method="post" class="flex flex-col">
+        <form action="http://localhost:8088/upload" target="_blank" enctype="multipart/form-data" method="post" class="flex flex-col">
             <label for="add_userAvatar--input" id="add_userAvatar--label" class="mb-5">Wybierz plik (wyłącznie format .png, .jpg, .jpeg)</label>
             <input type="file" accept=".jpg, .png, .jpeg" name="userAvatar" id="add_userAvatar--input" class="mb-5" />
             <input type="submit" id="add_userAvatar--save__btn" class="mt-5 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" value="Zapisz" />
@@ -107,11 +108,11 @@
         </div>
         <div id="userProfile--cont" class="w-3/12 border-2 border-stone-950 rounded-tr-lg flex flex-col items-center bg-[#dcecf5]">
             <h2 class="w-full h-fit flex flex-row justify-center underline decoration-solid text-lg font-semibold ">Twój profil:</h2>
-            <div id="profile_img--cont" class="w-28 h-28 mt-3 border-2 flex flex-row justify-self-center border-stone-950 rounded-full overflow-hidden">
-                <button type="button" id="add_userAvatar" class="add_userAvatar">Dodaj swój avatar</button>
+            <div id="profile_img--cont" class="w-24 h-24 mt-3 border-2 flex flex-row justify-self-center justify-center items-center border-stone-950 rounded-full overflow-hidden">
             </div>
             <ul class=" w-full h-fit mt-5 flex flex-col align-center ">
                 <li><button class="addnote">Dodaj notatkę</button></li>
+                <li><button type="button" id="add_userAvatar" class="add_userAvatar">Dodaj swój avatar</button></li>
                 <li><button id="change_userMail--btn">Zmień adres e-mail</button></li>
                 <li><button>Zmień hasło</button></li>
                 <li><button class="logOutBtn">Wyloguj</button></li>

@@ -3,8 +3,8 @@ const editModal = document.getElementById('editNote--form');
 const delnoteModal = document.getElementById('del_Note--modal');
 
 export const showAddForm = function () {
-	addNoteForm.classList.remove('invisible');
-	addNoteForm.classList.add('visible');
+	addNoteForm.classList.toggle('invisible');
+	addNoteForm.classList.toggle('visible');
 };
 
 export const closeAddForm = function () {

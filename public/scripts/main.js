@@ -1,7 +1,7 @@
 import { showNote, deleteNote, updateNote } from '../JS_modules/main_page_functions.js';
 import { logOut, changeEmailFr } from '../JS_modules/user_functions.js';
 import { showAddForm, closeAddForm, closeEditForm, MailForm, showDelModal, hideDelModal } from '../JS_modules/formFunctions.js';
-import { showAvatarForm } from '../JS_modules/avatar_functions.js';
+import { showAvatarForm, getAvatar, createAvatarHandler } from '../JS_modules/avatar_functions.js';
 import { divNoteHandler } from '../JS_modules/divNote_handler.js';
 import { getPDF } from '../JS_modules/downloadPDF.js';
 
@@ -113,10 +113,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 			divNotes.removeChild(divNotes.firstChild);
 		}
 	};
-});
 
-document.addEventListener('DOMContentLoaded', function () {
 	divNoteHandler();
+	getAvatar();
+	createAvatarHandler();
+	showAvatarForm();
 });
 
 updatedNoteBtn.addEventListener('click', function (e) {
@@ -147,4 +148,3 @@ addNoteBtns.forEach(btn => btn.addEventListener('click', showAddForm));
 closeAddForm();
 closeEditForm();
 MailForm();
-showAvatarForm();

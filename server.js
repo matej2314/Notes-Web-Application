@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
-const port = process.env.SERV_PORT;
+const port = process.env.SERV_PORT || 8088;
 const favicon = require('serve-favicon');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 app.use(
 	cors({
-		origin: 'http://localhost:8088',
+		origin: `http://localhost:${port}`,
 		credentials: true,
 	})
 );
@@ -38,15 +38,3 @@ app.use('/', authRoutes);
 app.listen(port, () => {
 	console.log(`SERVER LISTENING ON PORT ${port}`);
 });
-
-// process.on('SIGTERM', () => {
-// 	server.close(() => {
-// 		console.log('Proces zakończony');
-// 	});
-// });
-
-// process.on('SIGINT', () => {
-// 	server.close(() => {
-// 		console.log('Aplikacja została przerwana');
-// 	});
-// });

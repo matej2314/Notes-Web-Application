@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const verifyJWT = require('../controllers/verifyJWT');
 const uploadFile = require('../controllers/uploadFiles');
+const sendAvatar = require('../controllers/sendAvatar');
 
 // Middleware do obsługi danych z formularzy i JSON
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -21,5 +22,6 @@ router.get('/main', verifyJWT, (req, res) => {
 });
 
 router.post('/upload', verifyJWT, uploadFile);
+router.get('/avatar', verifyJWT, sendAvatar);
 
 module.exports = router;
