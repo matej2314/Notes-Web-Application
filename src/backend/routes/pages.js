@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const bodyParser = require('body-parser');
 const verifyJWT = require('../controllers/verifyJWT');
+const uploadFile = require('../controllers/uploadFiles');
 
 // Middleware do obsługi danych z formularzy i JSON
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -19,6 +20,6 @@ router.get('/main', verifyJWT, (req, res) => {
 	res.sendFile(path.join(__dirname, '../../../public/html', 'main_page.html'));
 });
 
-router.post('/upload', verifyJWT, (req, res) => {});
+router.post('/upload', verifyJWT, uploadFile);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 import { formDate } from './formFunctions.js';
+import { divNoteStyle } from './divNote_handler.js';
 
 ('use strict');
 
@@ -80,17 +81,7 @@ export const showNote = function (notes) {
 	});
 };
 
-const divNotestyle = () => {
-	const divNote = document.getElementById('divNotes');
-
-	if (divNote.childElementCount < 2 || divNote.childElementCount === 2) {
-		divNote.classList.remove('justify-between');
-		divNote.classList.add('justify-start');
-	} else {
-		divNote.classList.add('justify-between');
-	}
-};
-divNotestyle();
+divNoteStyle();
 
 export const updateNote = async function (noteId, noteTitle, noteContent, noteWeight) {
 	try {
