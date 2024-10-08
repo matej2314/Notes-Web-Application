@@ -59,7 +59,7 @@ saveNoteBtn.addEventListener('click', function (e) {
 	closeAddForm();
 });
 
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', function () {
 	const getAllNotes = async function () {
 		try {
 			const response = await fetch('http://localhost:8088/notes/all', {

@@ -1,4 +1,4 @@
-const avatarContainer = document.getElementById('profile_img--cont'); // parentElement
+const avatarContainer = document.getElementById('profile_img--cont');
 const avatarForm = document.getElementById('add_userAvatar--form');
 
 export const getAvatar = async function (req, res) {
@@ -41,6 +41,7 @@ export const createAvatarHandler = function (avFromDb) {
 	} else {
 		imgEl.src = '../images/avatars/default.jpg';
 	}
+
 	avatarContainer.appendChild(imgEl);
 };
 
