@@ -10,6 +10,29 @@ const btnSubmit = document.getElementById('btn-submit');
 const mainSiteBtn = document.getElementById('mainSiteBtn');
 const allinputs = document.querySelectorAll('.input');
 
+function handleCredentialResponse(response) {
+	const tokenId = response.credentials;
+
+	fetch('http://localhost:8088/google-login', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ tokenId: tokenId }),
+		credentials: 'include',
+	})
+		.then(res => res.json())
+		.then(data => {
+			if (data.message === 'Zalogowano pomyślnie.') {
+				alert('Zalogowano przez Google!');
+				window.location.href = 'http://localhost:8088/main';
+			} else {
+				alert('Błąd logowania z Google!');
+			}
+		})
+		.catch(error => console.log('Błąd logowania:', error.message));
+}
+
 btnLogin.addEventListener('click', function () {
 	if (regWindow.classList.contains('visible')) {
 		regWindow.classList.remove('visible');

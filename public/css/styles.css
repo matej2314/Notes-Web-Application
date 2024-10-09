@@ -578,6 +578,10 @@ video {
   left: 0px;
 }
 
+.left-2 {
+  left: 0.5rem;
+}
+
 .right-2 {
   right: 0.5rem;
 }
@@ -588,10 +592,6 @@ video {
 
 .top-0\.5 {
   top: 0.125rem;
-}
-
-.left-2 {
-  left: 0.5rem;
 }
 
 .z-0 {

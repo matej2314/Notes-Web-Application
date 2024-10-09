@@ -5,14 +5,13 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const jwtCookieOptions = {
 	httpOnly: true,
 	secure: false,
 	maxAge: 86400000,
 };
-
-const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.registerUser = async (req, res) => {
 	try {

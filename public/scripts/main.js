@@ -1,7 +1,7 @@
 import { showNote, updateNote } from '../JS_modules/main_page_functions.js';
 import { logOut, changeEmailFr } from '../JS_modules/user_functions.js';
 import { showAddForm, closeAddForm, closeEditForm, MailForm } from '../JS_modules/formFunctions.js';
-import { showAvatarForm, getAvatar, createAvatarHandler } from '../JS_modules/avatar_functions.js';
+import { showAvatarForm, getAvatar, createAvatarHandler, uploadAvatar } from '../JS_modules/avatar_functions.js';
 import { divNoteHandler } from '../JS_modules/divNote_handler.js';
 
 const logOutBtns = document.querySelectorAll('.logOutBtn');
@@ -117,6 +117,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	getAvatar();
 	createAvatarHandler();
 	showAvatarForm();
+	uploadAvatar();
+	closeAddForm();
+	closeEditForm();
+	MailForm();
 });
 
 updatedNoteBtn.addEventListener('click', function (e) {
@@ -143,7 +147,3 @@ changeEmailBtn.addEventListener('click', function (e) {
 logOutBtns.forEach(btn => btn.addEventListener('click', logOut));
 
 addNoteBtns.forEach(btn => btn.addEventListener('click', showAddForm));
-
-closeAddForm();
-closeEditForm();
-MailForm();

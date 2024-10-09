@@ -25,7 +25,7 @@ const uploadFile = (req, res) => {
 				return res.status(500).json({ message: 'Błąd zapisu pliku.' });
 			}
 
-			res.status(200).send('Plik dodany.');
+			res.status(200).json({ message: 'Plik dodany.' });
 		});
 	});
 };

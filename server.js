@@ -13,7 +13,14 @@ app.use(cookieParser());
 
 app.use(
 	cors({
-		origin: `http://localhost:${port}`,
+		origin: (origin, callback) => {
+			const allowedOrigins = [`http://localhost:8088`, `http://127.0.0.1:8088`];
+			if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+				callback(null, true);
+			} else {
+				callback(new Error('Not allowed by CORS'));
+			}
+		},
 		credentials: true,
 	})
 );

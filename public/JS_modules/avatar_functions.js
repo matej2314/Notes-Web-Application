@@ -35,9 +35,14 @@ export const createAvatarHandler = function (avFromDb) {
 
 	const imgEl = document.createElement('img');
 	imgEl.id = 'userAvatar--img';
+	imgEl.setAttribute('style', 'width: 100%, height: 100%;');
 
 	if (avFromDb) {
-		imgEl.src = `../images/avatars/${avFromDb}`;
+		if (avFromDb.startsWith('http')) {
+			imgEl.src = avFromDb;
+		} else {
+			imgEl.src = `../images/avatars/${avFromDb}`;
+		}
 	} else {
 		imgEl.src = '../images/avatars/default.jpg';
 	}
@@ -50,6 +55,35 @@ export const showAvatarForm = function () {
 		if (e.target && e.target.matches('.add_userAvatar')) {
 			avatarForm.classList.toggle('invisible');
 			avatarForm.classList.toggle('visible');
+		}
+	});
+};
+
+export const uploadAvatar = function (e) {
+	document.getElementById('upload_Avatar--form').addEventListener('submit', async function (e) {
+		e.preventDefault();
+		const form = document.getElementById('upload_Avatar--form');
+		const formData = new FormData(form);
+
+		try {
+			const response = await fetch(form.action, {
+				method: form.method,
+				body: formData,
+			});
+
+			if (response.ok) {
+				const result = await response.json();
+				alert(result.message);
+				avatarForm.classList.toggle('visible');
+				avatarForm.classList.toggle('invisible');
+			} else {
+				const errorResult = await response.json();
+				alert(errorResult.message);
+				location.reload();
+			}
+		} catch (error) {
+			console.log(error.message);
+			alert('Nie udało się załadować avatara :(');
 		}
 	});
 };
