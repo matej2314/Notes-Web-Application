@@ -984,6 +984,10 @@ video {
   text-decoration-style: solid;
 }
 
+.outline {
+  outline-style: solid;
+}
+
 .hover\:bg-\[\#3e6173\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(62 97 115 / var(--tw-bg-opacity));
