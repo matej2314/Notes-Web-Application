@@ -22,6 +22,7 @@
 		"express": "^4.21.0",
 		"express-fileupload": "^1.5.1",
 		"firebase": "^10.14.0",
+		"firebase-admin": "^12.6.0",
 		"jsonwebtoken": "^9.0.2",
 		"mysql2": "^3.11.3",
 		"nodemailer": "^6.9.15",
