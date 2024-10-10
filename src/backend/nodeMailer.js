@@ -1,16 +1,17 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-	service: 'gmail', //nazwa usługi
+	host: 'in-v3.mailjet.com', //nazwa usługi
+	port: 587,
 	auth: {
-		user: 'moj.email@gmail.com',
-		pass: 'haslo_do_email',
+		user: 'a7a249decdba3c3944ac229567a57e89',
+		pass: 'b4b19d303f02667040bba9b10a90450b',
 	},
 });
 
 const sendEmail = (to, subject, text) => {
 	const mailOptions = {
-		from: 'moj.email@gmail.com',
+		from: 'mateo2314@gmail.com',
 		to: to,
 		subject: subject,
 		text: text,

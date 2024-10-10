@@ -3,7 +3,7 @@ import { divNoteStyle } from './divNote_handler.js';
 
 ('use strict');
 
-export const showNote = function (notes) {
+export const showNotes = function (notes) {
 	const divNotes = document.getElementById('divNotes');
 
 	notes.notes.forEach(note => {

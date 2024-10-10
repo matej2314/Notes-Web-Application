@@ -1,6 +1,7 @@
 const addNoteForm = document.getElementById('addNote--form');
 const editModal = document.getElementById('editNote--form');
 const delnoteModal = document.getElementById('del_Note--modal');
+const changePassModal = document.getElementById('');
 
 export const showAddForm = function () {
 	addNoteForm.classList.toggle('invisible');
@@ -31,6 +32,22 @@ export const showDelModal = function () {
 export const hideDelModal = function () {
 	delnoteModal.classList.remove('visible');
 	delnoteModal.classList.add('invisible');
+};
+
+export const changePassForm = function () {
+	const changePassBtn = document.getElementById('change_userPass--btn');
+	const changePassForm = document.getElementById('change_userPass--form');
+	const closePassFormBtn = document.getElementById('closePassForm--btn');
+
+	changePassBtn.addEventListener('click', function () {
+		changePassForm.classList.toggle('invisible');
+		changePassForm.classList.toggle('visible');
+	});
+
+	closePassFormBtn.addEventListener('click', function () {
+		changePassForm.classList.remove('visible');
+		changePassForm.classList.add('invisible');
+	});
 };
 
 export const MailForm = function () {

@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const JWT_SECRET = process.env.JWT_SECRET;
+const sendEmail = require('../nodeMailer');
 
 const jwtCookieOptions = {
 	httpOnly: true,
@@ -44,6 +45,14 @@ exports.registerUser = async (req, res) => {
 					res.cookie('SESSID', token, jwtCookieOptions);
 
 					res.status(200).json({ message: 'Użytkownik zarejestrowany pomyślnie. Możesz się zalogować!' });
+
+					sendEmail(reg_email, 'Rejestracja zakończona sukcesem', `Witaj ${reg_username}, dziękujemy za rejestrację w naszym serwisie!`)
+						.then(() => {
+							console.log(`Wysłano e-mail powitalny do ${reg_email}`);
+						})
+						.catch(error => {
+							console.log(`Błąd wysyłania e-maila do ${reg_email}:`, error.message);
+						});
 				});
 			} catch (err) {
 				return res.status(500).send('Błąd serwera');
@@ -92,39 +101,61 @@ exports.logoutUser = (req, res) => {
 	res.status(200).json({ message: 'Wylogowano poprawnie.' });
 };
 
-exports.changeEmail = (req, res) => {
-	const userId = req.body;
-	const { username, email, newEmail } = req.body;
+exports.changeEmail = async (req, res) => {
+	const { userId, username, email, newEmail } = req.body;
 
 	if (!userId || !newEmail || !username || !email) {
 		return res.status(400).send('Podaj prawidłowe dane');
 	}
 
-	connection.query('SELECT email FROM users WHERE email=?', [newEmail], async (error, results) => {
-		if (error) {
-			return res.status(500).send('Błąd serwera.');
-		}
-
+	try {
+		const [results] = await connection.query('SELECT email FROM users WHERE email=?', [newEmail]);
 		if (results.length > 0) {
 			return res.status(400).send('Ten adres e-mail jest już zarejestrowany!');
 		}
 
-		connection.query('SELECT id FROM users WHERE id=? name=? AND email=?', [userId, username, email], async (error, results) => {
-			if (error) {
-				return res.status(500).send('Błąd serwera');
-			}
+		const [userResults] = await connection.query('SELECT id FROM users WHERE id=? AND name=? AND email=?', [userId, username, email]);
+		if (userResults.length === 0) {
+			return res.status(400).send('Podano nieprawidłowe dane użytkownika');
+		}
 
-			if (results.length === 0) {
-				return res.status(400).send('Podano nieprawidłowe dane użytkownika');
-			}
+		await connection.query('UPDATE users SET email=? WHERE id=?', [newEmail, userId]);
+		return res.status(200).send('Adres e-mail zmieniony pomyślnie');
+	} catch (error) {
+		console.log('Błąd serwera', error);
+		return res.status(500).send('Błąd serwera');
+	}
+};
 
-			connection.query('UPDATE users SET email=? WHERE id=?', [newEmail, userId], async updateError => {
-				if (updateError) {
-					console.log('Błąd aktualizacji adresu e-mail', updateError);
-					return res.status(500).send('Błąd serwera');
-				}
-				return res.status(200).send('Adres e-mail zmieniony pomyślnie');
-			});
-		});
-	});
+exports.changePass = async (req, res) => {
+	const userId = req.userId;
+	const userName = req.body.name;
+	const oldPass = req.body.oldPass;
+	const newPass = req.body.newPass;
+
+	if (!userId || !userName || !oldPass || !newPass) {
+		return res.status(400).json({ message: 'Brak wymaganych danych.' });
+	}
+
+	try {
+		const [results] = await connection.query('SELECT * FROM users WHERE id=?', [userId]);
+		if (results.length === 0) {
+			return res.status(400).json({ message: 'Nieprawidłowe dane użytkownika.' });
+		}
+
+		const user = results[0];
+		const isMatch = await bcrypt.compare(oldPass, user.password);
+		if (!isMatch) {
+			return res.status(400).json({ message: 'Podaj poprawne obecne hasło.' });
+		}
+
+		const hashedPasswd = await bcrypt.hash(newPass, 10);
+
+		await connection.query('UPDATE users SET password=? WHERE id=?', [hashedPasswd, userId]);
+
+		return res.status(200).json({ message: 'Hasło zostało zmienione.' });
+	} catch (error) {
+		console.log('Nie udało się zmienić hasła.', error.message);
+		return res.status(500).json({ message: 'Nie udało się zmienić hasła.' });
+	}
 };

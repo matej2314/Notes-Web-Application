@@ -35,8 +35,8 @@ export const changeEmailFr = async function (req, res) {
 		});
 
 		if (!response.ok) {
-			console.log('Wystąpił błąd podczas zmiany hasła:', response.statusText);
-			alert('Błąd podczas zmiany hasła.');
+			console.log('Wystąpił błąd podczas zmiany adresu kontaktowego:', response.statusText);
+			alert('Błąd podczas zmiany adresu kontaktowego.');
 			return;
 		}
 
@@ -45,6 +45,48 @@ export const changeEmailFr = async function (req, res) {
 	} catch (err) {
 		if (err) {
 			console.log('Błąd zmiany adresu e-mail:', err.message);
+		}
+	}
+};
+
+export const changePassFr = async function (req, res) {
+	const name = document.getElementById('user_Name--input').value;
+	const oldPass = document.getElementById('user_oldPass--input').value;
+	const newPass = document.getElementById('user_newPass--input').value;
+
+	if (!name || !oldPass || !newPass) {
+		alert('Podaj wymagane dane!');
+		return;
+	}
+	if (newPass.length < 10) {
+		alert('Nowe hasło musi mieć minimum 10 znaków.');
+		return;
+	}
+	if (oldPass === newPass) {
+		alert('Hasła nie mogą być identyczne!');
+		return;
+	}
+
+	try {
+		const response = await fetch('http://localhost:8088/userpass', {
+			method: 'PUT',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ name, oldPass, newPass }),
+		});
+
+		if (!response.ok) {
+			console.log(`Wystąpił błąd podczas zmiany hasła:, ${response.statusText || data.message}`);
+		}
+
+		if (response.ok) {
+			alert('Hasło zostało zmienione.');
+		}
+	} catch (error) {
+		if (error) {
+			console.log('Błąd zmiany hasła', error.message);
 		}
 	}
 };

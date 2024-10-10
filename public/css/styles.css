@@ -616,6 +616,11 @@ video {
   margin-bottom: 1.25rem;
 }
 
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -982,10 +987,6 @@ video {
 
 .decoration-solid {
   text-decoration-style: solid;
-}
-
-.outline {
-  outline-style: solid;
 }
 
 .hover\:bg-\[\#3e6173\]:hover {

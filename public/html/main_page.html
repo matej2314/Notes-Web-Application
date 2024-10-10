@@ -50,6 +50,19 @@
             <input type="submit" value="Zmień e-mail" id="sendNewEmail--btn" class="mt-5 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" />
         </form>
     </div>
+    <div id="change_userPass--form" class="w-1/4 h-fit fixed top-50% left-50%  flex flex-col justify-start items-center z-10 border-4 border-white pt-2 px-5 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg invisible">
+        <button id="closePassForm--btn" class="absolute w-full h-fit flex flex-row justify-end"><img src="../images/cross.png" alt="exit" class="relative top-0 right-2" /></button>
+        <h2 class="w-full h-full text-xl flex flex-row justify-center my-2">Zmiana hasła:</h2>
+        <form action="" class="w-3/4 h-full flex flex-col justify-center">
+            <label for="user_Name--input" id="user_Name--label" class="mb-2">Wprowadź swój login:</label>
+            <input type="text" name="user_Name--input" id="user_Name--input" />
+            <label for="user_oldPass--input" id="user_oldPass--label" class="my-2">Wprowadź obecne hasło:</label>
+            <input type="password" name="user_oldPass--input" id="user_oldPass--input" minlength="10" maxlength="30" />
+            <label for="user_newPass--input" id="user_newPass--label" class="my-2">Wprowadź nowe hasło:</label>
+            <input type="password" name="user_newPass--input" id="user_newPass--input" minlength="10" maxlength="30" />
+            <input type="submit" id="changePass--btn" class="mt-5 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" value="Zmień hasło" />
+        </form>
+    </div>
     <div id="add_userAvatar--form" class="w-fit h-fit fixed top-50% left-50%  flex flex-col justify-start items-center z-10 border-4 border-white pt-2 px-5 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg invisible">
         <button id="close_Avatar--form" class="w-full h-fit flex flex-row justify-end"><img src="../images/cross.png" alt="zamknij formularz dodawania avatara" class="relative  left-2"></button>
         <h2 class="w-full h-fit text-xl flex flex-row justify-center my-5">Dodaj swój avatar</h2>
@@ -114,7 +127,7 @@
                 <li><button class="addnote">Dodaj notatkę</button></li>
                 <li><button type="button" id="add_userAvatar" class="add_userAvatar">Dodaj swój avatar</button></li>
                 <li><button id="change_userMail--btn">Zmień adres e-mail</button></li>
-                <li><button>Zmień hasło</button></li>
+                <li><button id="change_userPass--btn">Zmień hasło</button></li>
                 <li><button class="logOutBtn">Wyloguj</button></li>
             </ul>
         </div>

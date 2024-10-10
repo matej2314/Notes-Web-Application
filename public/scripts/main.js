@@ -1,6 +1,6 @@
-import { showNote, updateNote } from '../JS_modules/main_page_functions.js';
-import { logOut, changeEmailFr } from '../JS_modules/user_functions.js';
-import { showAddForm, closeAddForm, closeEditForm, MailForm } from '../JS_modules/formFunctions.js';
+import { showNotes, updateNote } from '../JS_modules/main_page_functions.js';
+import { logOut, changeEmailFr, changePassFr } from '../JS_modules/user_functions.js';
+import { showAddForm, closeAddForm, closeEditForm, MailForm, changePassForm } from '../JS_modules/formFunctions.js';
 import { showAvatarForm, getAvatar, createAvatarHandler, uploadAvatar } from '../JS_modules/avatar_functions.js';
 import { divNoteHandler } from '../JS_modules/divNote_handler.js';
 
@@ -15,6 +15,7 @@ const updatedNoteBtn = document.getElementById('sendNewNote--btn');
 const fromNewestBtn = document.getElementById('fromNewest--btn');
 const fromOldestBtn = document.getElementById('fromOldest--btn');
 const changeEmailBtn = document.getElementById('sendNewEmail--btn');
+const changePassBtn = document.getElementById('changePass--btn');
 
 const addNote = async function () {
 	const noteTitleValue = noteTitle.value;
@@ -93,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const notes = await getAllNotes();
 		if (notes) {
 			currentNotes = notes.notes;
-			showNote({ notes: sortNotes(currentNotes, 'newest') });
+			showNotes({ notes: sortNotes(currentNotes, 'newest') });
 		}
 	};
 
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	const updateNotes = order => {
 		clearNotes();
-		showNote({ notes: sortNotes(currentNotes, order) });
+		showNotes({ notes: sortNotes(currentNotes, order) });
 	};
 
 	fromOldestBtn.addEventListener('click', () => updateNotes('oldest'));
@@ -121,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	closeAddForm();
 	closeEditForm();
 	MailForm();
+	changePassForm();
 });
 
 updatedNoteBtn.addEventListener('click', function (e) {
@@ -142,6 +144,10 @@ updatedNoteBtn.addEventListener('click', function (e) {
 changeEmailBtn.addEventListener('click', function (e) {
 	e.preventDefault();
 	changeEmailFr();
+});
+changePassBtn.addEventListener('click', function (e) {
+	e.preventDefault();
+	changePassFr();
 });
 
 logOutBtns.forEach(btn => btn.addEventListener('click', logOut));
