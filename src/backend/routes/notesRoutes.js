@@ -7,6 +7,7 @@ const generatePDF = require('../controllers/generatePDF');
 const verifyJWT = require('../controllers/verifyJWT');
 const { v4: uuidv4 } = require('uuid');
 const formattedDate = require('../backend_modules/formattedDate');
+const logger = require('../logger');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
@@ -28,7 +29,8 @@ router.post('/', verifyJWT, (req, res) => {
 
 	connection.query(sqlQuery, [id, userId, noteTitle, noteContent, noteWeight, date], (err, result) => {
 		if (err) {
-			console.log('Błąd podczas dodawania notatki:', err.message);
+			logger.error('Błąd podczas dodawania notatki:', err.message);
+
 			return res.status(500).send(`Błąd serwera: ${err.message}`);
 		}
 		res.status(201).json({
@@ -50,6 +52,7 @@ router.get('/', verifyJWT, (req, res) => {
 
 	connection.query(sqlQuery, [noteId, userId], (err, result) => {
 		if (err) {
+			logger.error(err.message);
 			return res.status(500).send('Błąd pobierania danych:', err.message);
 		}
 
@@ -73,14 +76,14 @@ router.get('/all', verifyJWT, (req, res) => {
 	const userId = req.userId;
 
 	if (!userId) {
-		return res.send(400).send('Brak danych');
+		return res.status(400).send('Brak danych');
 	}
 
 	const sqlQuery = `SELECT * FROM notes WHERE user_id=?`;
 
 	connection.query(sqlQuery, [userId], (err, rows) => {
 		if (err) {
-			console.log('Błąd podczas pobierania danych:', err.message);
+			logger.error('Błąd podczas pobierania danych:', err.message);
 			return res.status(500).send('Błąd serwera.');
 		}
 		if (rows.length === 0) {
@@ -108,7 +111,7 @@ router.put('/edit', verifyJWT, (req, res) => {
 
 	connection.query(sqlQuery, [noteTitle, noteContent, noteWeight, noteId, userId], (err, result) => {
 		if (err) {
-			console.error('Błąd podczas aktualizacji notatki', err.message);
+			logger.error('Błąd podczas aktualizacji notatki', err.message);
 			return res.status(500).json({ message: 'Błąd serwera' });
 		}
 		return res.status(200).json({ message: 'Notatka zaktualizowana' });
@@ -127,7 +130,7 @@ router.delete('/delete', verifyJWT, (req, res) => {
 
 	connection.query(sqlQuery, [noteId, userId], (err, result) => {
 		if (err) {
-			console.log('Błąd podczas usuwania danych:', err.message);
+			logger.error('Błąd podczas usuwania danych:', err.message);
 			return res.status(500).send('Błąd serwera', err.message);
 		}
 

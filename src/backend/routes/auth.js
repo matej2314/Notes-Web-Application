@@ -11,8 +11,8 @@ const jwtCookieOptions = {
 
 router.post('/register', authController.registerUser);
 router.post('/login', authController.loginUser);
-router.put('/usermail', verifyJWT, authController.changeEmail);
-router.put('/userpass', verifyJWT, authController.changePass);
+router.post('/usermail', verifyJWT, authController.changeEmail);
+router.post('/userpass', verifyJWT, authController.changePass);
 router.post('/logout', authController.logoutUser);
 
 module.exports = router;

@@ -1,3 +1,5 @@
+import { closeAvFrom } from './formFunctions.js';
+
 const avatarContainer = document.getElementById('profile_img--cont');
 const avatarForm = document.getElementById('add_userAvatar--form');
 
@@ -55,6 +57,13 @@ export const showAvatarForm = function () {
 		if (e.target && e.target.matches('.add_userAvatar')) {
 			avatarForm.classList.toggle('invisible');
 			avatarForm.classList.toggle('visible');
+		}
+	});
+};
+export const closeAvatarForm = function () {
+	document.addEventListener('click', function (e) {
+		if (e.target && e.target.matches('.close_Avatar--form img')) {
+			closeAvFrom();
 		}
 	});
 };

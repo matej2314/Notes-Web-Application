@@ -93,10 +93,10 @@ regSubmit.addEventListener('click', async function (e) {
 				alert('Użytkownik zarejestrowany. Możesz się zalogować');
 				divReg.classList.add('invisible');
 			} else {
-				alert('Rejestracja nie powiodła się.');
+				alert('Rejestracja nie powiodła się.', response.statusText);
 			}
 		} catch (error) {
-			console.log('Błąd podczas rejestracji:', error.message);
+			console.log('Błąd podczas rejestracji:', error);
 			alert('Błąd podczas rejestracji.');
 		}
 	}

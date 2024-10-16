@@ -4,6 +4,7 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 const datetime = new Date().toLocaleString('pl');
+const logger = require('../logger');
 
 const generatePDF = async (req, res) => {
 	console.log('Dane przekazane na endpoint PDF:', req.body);
@@ -14,6 +15,7 @@ const generatePDF = async (req, res) => {
 	const noteDate = req.body.noteDate;
 
 	if (!userId || !noteId || !noteTitle || !noteContent || !noteDate) {
+		logger.error('Brak danych do PDF');
 		res.status(400).json({ message: 'Brak danych do PDF.' });
 	}
 
@@ -45,7 +47,7 @@ const generatePDF = async (req, res) => {
 		res.setHeader('Content-Disposition', 'attachment; filename="notatka.pdf"');
 		res.sendFile(filePath, err => {
 			if (err) {
-				console.log('Wystąpił błąd podczas wysyłania pliku:', err.message);
+				logger.error('Wystąpił błąd podczas wysyłania pliku:', err.message);
 				res.status(500).json({ message: 'Błąd pobierania pliku PDF' });
 			} else {
 				console.log('Plik PDF został wysłany');

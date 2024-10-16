@@ -2,6 +2,8 @@ const addNoteForm = document.getElementById('addNote--form');
 const editModal = document.getElementById('editNote--form');
 const delnoteModal = document.getElementById('del_Note--modal');
 const changePassModal = document.getElementById('');
+const closeAvatarForm = document.getElementById('close_Avatar--form');
+const userAvatarForm = document.getElementById('add_userAvatar--form');
 
 export const showAddForm = function () {
 	addNoteForm.classList.toggle('invisible');
@@ -64,6 +66,10 @@ export const MailForm = function () {
 		changeMailForm.classList.remove('visible');
 		changeMailForm.classList.add('invisible');
 	});
+};
+export const closeAvFrom = function () {
+	userAvatarForm.classList.remove('visible');
+	userAvatarForm.classList.add('invisible');
 };
 
 export const formDate = function (date) {

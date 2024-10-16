@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const logger = require('./logger');
 
 const transporter = nodemailer.createTransport({
 	host: 'in-v3.mailjet.com', //nazwa usługi
@@ -20,10 +21,10 @@ const sendEmail = (to, subject, text) => {
 	return transporter
 		.sendMail(mailOptions)
 		.then(info => {
-			console.log('Email wysłany:', info.response);
+			logger.info('Email wysłany:', info.response);
 		})
 		.catch(error => {
-			console.log('Błąd wysyłania wiadomości e-mail:', error);
+			logger.error('Błąd wysyłania wiadomości e-mail:', error);
 		});
 };
 

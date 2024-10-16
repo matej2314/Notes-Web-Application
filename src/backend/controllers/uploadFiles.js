@@ -1,5 +1,6 @@
 const path = require('path');
 const connection = require('../db');
+const logger = require('../logger');
 
 const uploadFile = (req, res) => {
 	const userId = req.userId;
@@ -15,6 +16,7 @@ const uploadFile = (req, res) => {
 
 	userAvatar.mv(uploadPath, function (err) {
 		if (err) {
+			logger.error(err.message);
 			return res.status(500).json({ message: err.message });
 		}
 
@@ -22,6 +24,7 @@ const uploadFile = (req, res) => {
 
 		connection.query(sql, [fileName, userId], (err, result) => {
 			if (err) {
+				logger.err(err.message);
 				return res.status(500).json({ message: 'Błąd zapisu pliku.' });
 			}
 

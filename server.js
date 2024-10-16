@@ -8,8 +8,10 @@ const port = process.env.SERV_PORT || 8088;
 const favicon = require('serve-favicon');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
+const logger = require('./src/backend/logger.js');
 
 app.use(cookieParser());
+app.use(express.json());
 
 app.use(
 	cors({
@@ -43,5 +45,5 @@ app.use('/', indexRoutes);
 app.use('/', authRoutes);
 
 app.listen(port, () => {
-	console.log(`SERVER LISTENING ON PORT ${port}`);
+	logger.info(`SERVER LISTENING ON PORT ${port}`);
 });

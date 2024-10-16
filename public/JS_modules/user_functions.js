@@ -20,13 +20,15 @@ export const logOut = async function (req, res) {
 };
 
 export const changeEmailFr = async function (req, res) {
+	const changeMail_Modal = document.getElementById('change_userMail--form');
 	const user_changeMail = document.getElementById('name_change--input');
 	const user_oldMail = document.getElementById('old_userMail--input');
 	const user_newMail = document.getElementById('new_userMail--input');
 
 	try {
+		console.log(user_changeMail.value, user_oldMail.value, user_newMail.value);
 		const response = await fetch('http://localhost:8088/usermail', {
-			method: 'PUT',
+			method: 'POST',
 			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
@@ -42,6 +44,8 @@ export const changeEmailFr = async function (req, res) {
 
 		const res = await response.json();
 		alert('Adres e-mail zmieniony poprawnie.');
+		changeMail_Modal.classList.remove('visible');
+		changeMail_Modal.classList.add('invisible');
 	} catch (err) {
 		if (err) {
 			console.log('Błąd zmiany adresu e-mail:', err.message);
@@ -69,7 +73,7 @@ export const changePassFr = async function (req, res) {
 
 	try {
 		const response = await fetch('http://localhost:8088/userpass', {
-			method: 'PUT',
+			method: 'POST',
 			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',

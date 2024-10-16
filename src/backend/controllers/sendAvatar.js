@@ -1,5 +1,6 @@
 const connection = require('../db');
 const express = require('express');
+const logger = require('../logger');
 
 const sendAvatar = (req, res) => {
 	userId = req.userId;
@@ -9,6 +10,7 @@ const sendAvatar = (req, res) => {
 	connection.query(sqlQuery, [userId], (err, result) => {
 		if (err) {
 			console.log('Wystąpił błąd pobierania avatara', err.message);
+			logger.error(err.message);
 			return res.status(500).json({ message: 'Błąd serwera.' });
 		}
 
