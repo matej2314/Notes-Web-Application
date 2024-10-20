@@ -40,8 +40,10 @@
 	<form action="">
 		<div id="login_window" tabindex="-1" class=" invisible w-fit h-fit fixed flex flex-col justify-start items-center z-10 border-4 border-white pt-2 pl-10 pr-10 pb-5 bg-[#585243] text-[#dcecf5] rounded-lg">
 			<p class="mb-5 text-xl uppercase">Logowanie</p>
-			<label id="login_input--label" for="login_input" class="mb-5 mt-5">Podaj login:</label>
-			<input id="login_input" class="mb-5 border-2 border-stone-950 text-stone-950 pl-2 input" type="text" minlength="5" maxlength="30" required />
+			<label id="login_input--label" for="login_input" class="my-5">Podaj login:</label>
+			<input id="login_input" class="border-2 border-stone-950 text-stone-950 pl-2 input" type="text" minlength="5" maxlength="30" required />
+			<label id="login_email--input_label" for="login_email--input" class="my-5">Podaj email:</label>
+			<input type="email" name="login_email--input" id="login_email--input" class="mb-5 border-2 border-stone-950 text-stone-950 pl-2 input" />
 			<label class="mb-5" id="login_input--label" for="pass_input">Podaj hasło:</label>
 			<input id="pass_input" class="border-2 border-stone-950 text-stone-950 pl-2 input" type="password" minlength="10" maxlength="30" required />
 			<input type="submit" id="btn-submit" class="mt-10 bg-[#6e97ab] p-2 rounded-lg hover:bg-[#3e6173] active:bg-[#3e6173] active:translate-y-1" value="Zaloguj" />

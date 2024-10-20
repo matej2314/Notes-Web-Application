@@ -5,6 +5,7 @@ const btnLogin = document.getElementById('btn-login');
 const modalWindow = document.getElementById('login_window');
 const regWindow = document.getElementById('reg_form');
 const loginInput = document.getElementById('login_input');
+const loginEmailInput = document.getElementById('login_email--input');
 const passwdInput = document.getElementById('pass_input');
 const btnSubmit = document.getElementById('btn-submit');
 const mainSiteBtn = document.getElementById('mainSiteBtn');
@@ -64,6 +65,7 @@ btnSubmit.addEventListener('click', async function (e) {
 
 	const sanitizedUsername = sanitizeInput(loginInput.value.trim());
 	const userpassword = passwdInput.value;
+	const userEmail = loginEmailInput.value;
 
 	// Logowanie danych przed wysłaniem
 	console.log('Dane do przesłania:', { username: loginInput.value, userpassword: userpassword });
@@ -81,7 +83,7 @@ btnSubmit.addEventListener('click', async function (e) {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ username: sanitizedUsername, userpassword }),
+			body: JSON.stringify({ username: sanitizedUsername, userpassword, email: userEmail }),
 		});
 
 		// Logowanie statusu odpowiedzi

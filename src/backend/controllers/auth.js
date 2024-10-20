@@ -103,20 +103,20 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-	const { username, userpassword } = req.body;
+	const { username, userpassword, email } = req.body;
 
 	if (!username || !userpassword) {
 		return res.status(400).json({ message: 'Proszę uzupełnić wszystkie pola.' });
 	}
 
-	connection.query('SELECT * FROM users WHERE name = ?', [username], async (error, results) => {
+	connection.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
 		if (error) {
 			logger.error('Błąd SELECT:', error.message);
 			return res.status(500).json({ message: 'Błąd serwera', error: error.message });
 		}
 
 		if (results.length === 0) {
-			return res.status(400).json({ message: 'Niepoprawny login lub hasło.' });
+			return res.status(400).json({ message: 'Niepoprawne dane logowania.' });
 		}
 
 		const user = results[0];
