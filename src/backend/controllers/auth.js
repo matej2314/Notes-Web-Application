@@ -15,15 +15,54 @@ const jwtCookieOptions = {
 	maxAge: 86400000,
 };
 
+// Funkcja walidująca hasło
+function isValidPassword(password) {
+	const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[*!#^])[A-Za-z\d*!#^]{10,30}$/;
+	return regex.test(password);
+}
+
+// Funkcja walidująca e-mail
+function isValidEmail(email) {
+	const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return regex.test(email);
+}
+
+// Funkcja walidująca nazwę użytkownika (alfanumeryczna, minimum 5 znaków)
+function isValidUsername(username) {
+	const regex = /^[a-zA-Z0-9]{5,}$/;
+	return regex.test(username);
+}
+
+// Funkcja rejestracji użytkownika
 exports.registerUser = async (req, res) => {
 	try {
 		const { reg_username, reg_email, reg_password } = req.body;
 
+		// Sprawdzanie, czy wszystkie pola są uzupełnione
 		if (!reg_username || !reg_email || !reg_password) {
 			logger.error('Proszę uzupełnić wszystkie pola!');
 			return res.status(400).send('Proszę uzupełnić wszystkie pola!');
 		}
 
+		// Walidacja nazwy użytkownika
+		if (!isValidUsername(reg_username)) {
+			logger.error('Nieprawidłowa nazwa użytkownika! (minimum 5 znaków, tylko litery i cyfry)');
+			return res.status(400).send('Nieprawidłowa nazwa użytkownika! (minimum 5 znaków, tylko litery i cyfry)');
+		}
+
+		// Walidacja adresu e-mail
+		if (!isValidEmail(reg_email)) {
+			logger.error('Podaj prawidłowy adres e-mail!');
+			return res.status(400).send('Podaj prawidłowy adres e-mail!');
+		}
+
+		// Walidacja hasła
+		if (!isValidPassword(reg_password)) {
+			logger.error('Wpisz prawidłowe hasło! (od 10 do 30 znaków, przynajmniej jedna duża litera, cyfra i znak specjalny: *#!^)');
+			return res.status(400).send('Wpisz prawidłowe hasło! (od 10 do 30 znaków, przynajmniej jedna duża litera, cyfra i znak specjalny: *#!^)');
+		}
+
+		// Sprawdzanie, czy e-mail już istnieje w bazie danych
 		connection.query('SELECT email FROM users WHERE email = ?', [reg_email], async (error, results) => {
 			if (error) {
 				logger.error(error.message);
@@ -35,16 +74,18 @@ exports.registerUser = async (req, res) => {
 			}
 
 			try {
+				// Haszowanie hasła
 				let hashedPasswd = await bcrypt.hash(reg_password, 10);
-
 				const userId = uuidv4();
 
-				connection.query('INSERT INTO users SET ?', { id: userId, name: reg_username, email: reg_email, password: hashedPasswd }, (error, results) => {
+				// Wstawianie użytkownika do bazy danych
+				connection.query('INSERT INTO users SET ?', { id: userId, name: reg_username, email: reg_email, password: hashedPasswd }, error => {
 					if (error) {
 						logger.error(error.message);
 						return res.status(500).send('Błąd serwera');
 					}
 
+					// Tworzenie tokena JWT i ustawianie ciasteczka
 					const token = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '1h' });
 					res.cookie('SESSID', token, jwtCookieOptions);
 

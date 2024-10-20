@@ -21,7 +21,7 @@ const logger = createLogger({
 		new DailyRotateFile({
 			filename: path.join(logDir, 'combined-%DATE%.log'),
 			datePattern: 'YYYY-MM-DD',
-			maxFiles: '3d', // Przechowuj wszystkie logi maksymalnie przez 3 dni
+			maxFiles: '3d',
 		}),
 	],
 });
