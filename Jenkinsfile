@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     echo "Cloning from ${GITHUB_REPO_URL}"
-                    git url: "${GITHUB_REPO_URL}", credentialsId: 'webhook-token'
+                    git url: "${GITHUB_REPO_URL}", credentialsId: 'webhook-docker-container-token'
                 }
             }
         }
