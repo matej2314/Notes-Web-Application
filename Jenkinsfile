@@ -4,18 +4,20 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                // Klonowanie repozytorium
-                git url: 'https://github.com/matej2314/Notes-Web-Application.git', credentialsId: 'twój_credential_id'
+                script {
+                    // Pobranie URL repozytorium z parametru przekazanego przez webhook
+                    git url: "${GITHUB_REPO_URL}", credentialsId: 'webhook-token'
+                }
             }
         }
-        
-         stage('Build Docker Image') {
+
+        stage('Build Docker Image') {
             steps {
                 script {
-                    // Budowanie obrazu Docker z pliku Dockerfile w repozytorium
+                    // Budowanie obrazu Docker z pliku Dockerfile
                     sh 'docker build -t notesapp:latest -f Dockerfile .'
                 }
             }
         }
-}
+    }
 }
