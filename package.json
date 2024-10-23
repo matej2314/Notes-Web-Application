@@ -27,7 +27,6 @@
 		"mysql2": "^3.11.3",
 		"nodemon": "^3.1.7",
 		"npm-watch": "^0.13.0",
-		"passport": "^0.7.0",
 		"pdfkit": "^0.15.0",
 		"postcss": "^8.4.47",
 		"postcss-cli": "^11.0.0",
