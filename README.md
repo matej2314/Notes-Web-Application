@@ -1,4 +1,4 @@
-# **Notes Web Application**
+# **Notes Web Application.**
 ## Simple notes manager
 
 Link to page of the project: https://noteswebapp.pl
