@@ -8,7 +8,7 @@ COPY . .
 
 RUN rm -rf node_modules && npm install
 
-EXPOSE 8080
+EXPOSE 8088
 
 CMD [ "node", "app.js" ]
 
