@@ -43,14 +43,16 @@ btnLogin.addEventListener('click', function () {
 	modalWindow.classList.toggle('visible');
 });
 
-// Funkcja walidująca hasło
 function isValidPassword(password) {
-	const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d!#*$<>:]{10,30}$/;
+	// Minimum 8 znaków, przynajmniej jedna mała litera, jedna duża litera, jedna cyfra i jeden ze znaków specjalnych *!#^%$@?
+	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[*!#^%$@?])[a-zA-Z\d*!#^%$@?]{10,30}$/;
 	return regex.test(password);
 }
-// Funkcja sanitizująca input (usuwanie niebezpiecznych znaków)
+
 function sanitizeInput(input) {
-	return input.replace(/[^a-zA-Z0-9!#*?]/g, ''); // Pozwala na !, #, *, ?
+	// Pozwalamy na litery, cyfry oraz znaki specjalne *!#^%$@?
+	const sanitized = input.replace(/[^a-zA-Z0-9*!#^%$@?]/g, '');
+	return sanitized;
 }
 
 btns.forEach(btn =>
@@ -86,9 +88,6 @@ btnSubmit.addEventListener('click', async function (e) {
 			body: JSON.stringify({ username: sanitizedUsername, userpassword, email: userEmail }),
 		});
 
-		// Logowanie statusu odpowiedzi
-		console.log('Status odpowiedzi serwera:', response.body);
-
 		if (response.ok) {
 			// Odczytanie odpowiedzi tylko raz
 			const result = await response.json();
@@ -97,11 +96,9 @@ btnSubmit.addEventListener('click', async function (e) {
 			sessionStorage.setItem('userId', result.userId);
 			window.location.href = result.redirectUrl;
 		} else {
-			const errorMessage = await response.text();
-			alert('Niepoprawne dane logowania. ' + errorMessage);
+			alert('Niepoprawne dane logowania');
 		}
 	} catch (error) {
-		console.log('Błąd:', error);
 		alert('Wystąpił błąd podczas logowania');
 	}
 });

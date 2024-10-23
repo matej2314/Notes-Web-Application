@@ -10,13 +10,14 @@ const regEmail = document.getElementById('reg_email--input');
 const regSubmit = document.getElementById('reg_submit--btn');
 
 function isValidPassword(password) {
-	const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[*!#^])[A-Za-z\d*!#^]{10,30}$/;
+	// Minimum 8 znaków, przynajmniej jedna mała litera, jedna duża litera, jedna cyfra i jeden ze znaków specjalnych *!#^%$@?
+	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[*!#^%$@?])[a-zA-Z\d*!#^%$@?]{10,30}$/;
 	return regex.test(password);
 }
 
 // Funkcja sanitizująca input (usuwanie niebezpiecznych znaków)
 function sanitizeInput(input) {
-	return input.replace(/[^a-zA-Z0-9!#*?@.]/g, ''); // Pozwala na !, #, *, ?, @, .
+	return input.replace(/[^a-zA-Z0-9!#*?@.%]/g, '');
 }
 
 function containsDangCharacters(input) {

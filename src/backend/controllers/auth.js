@@ -15,9 +15,9 @@ const jwtCookieOptions = {
 	maxAge: 86400000,
 };
 
-// Funkcja walidująca hasło
 function isValidPassword(password) {
-	const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[*!#^])[A-Za-z\d*!#^]{10,30}$/;
+	// Minimum 8 znaków, przynajmniej jedna mała litera, jedna duża litera, jedna cyfra i jeden ze znaków specjalnych *!#^%$@?
+	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[*!#^%$@?])[a-zA-Z\d*!#^%$@?]{10,30}$/;
 	return regex.test(password);
 }
 
