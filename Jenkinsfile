@@ -5,7 +5,7 @@ pipeline {
         stage('Clone') {
             steps {
                 // Klonowanie repozytorium
-                git url: 'https://github.com/matej2314/Notes-Web-Application.git', credentialsId: 'twój_credential_id'
+                git url: 'https://github.com/matej2314/Notes-Web-Application.git', credentialsId: 'webhook-token'
             }
         }
         
