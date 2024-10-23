@@ -1,11 +1,12 @@
 pipeline {
     agent any
+
     stages {
         stage('Clone') {
             steps {
                 script {
-                    // Pobranie URL repozytorium z parametru przekazanego przez webhook
-                    git url: "${GITHUB_REPO_URL}", credentialsId: 'your_credentials_id'
+                    echo "Cloning from ${GITHUB_REPO_URL}"
+                    git url: "${GITHUB_REPO_URL}", credentialsId: 'webhook-token'
                 }
             }
         }
@@ -13,10 +14,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Budowanie obrazu Docker z pliku Dockerfile
+                    echo "Building Docker image..."
                     sh 'docker build -t notesapp:latest -f Dockerfile .'
                 }
             }
         }
     }
 }
+
