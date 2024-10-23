@@ -7,7 +7,7 @@ Link to page of the project: https://noteswebapp.pl
 This was my second full stack project in node.js. I don't want to copy existing in the Internet projects and decided to make my own version. It's not perfect in the graphic layer but work (in my opinion) perfectly.
 
 ## Functionality of application
-This application allows users to make, save, delete, edit their own notes. In addition it allows to save selected note to PDF file. 
+This application allows users to make, save, delete and edit their own notes. Each user can register and store notes in their user profile. In addition app allows to save selected note to PDF file and set individual profile image. 
 
 ## Tech stack
 
