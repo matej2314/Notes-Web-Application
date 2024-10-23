@@ -1,5 +1,5 @@
 # **Notes Web Application**
-## simple notes manager
+## Simple notes manager
 
 Link to page of the project: https://noteswebapp.pl
 
