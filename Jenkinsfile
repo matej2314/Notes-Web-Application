@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     echo "Cloning repository from ${GITHUB_REPO_URL}"
-                    git url: "${GITHUB_REPO_URL}", credentialsId: 'webhook-docker-container-token'
+                    git url: "${GITHUB_REPO_URL}"
                 }
             }
         }
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image..."
-                    sh 'docker build -t notesapp:latest -f Dockerfile .'
+                    sh 'docker build -t my-docker-image:latest -f Dockerfile .'
                     echo "Docker image build completed."
                 }
             }
