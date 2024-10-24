@@ -25,3 +25,4 @@ Ok, it have a few bugs and imperfections, but I can already say that I am planni
 ## Installation
 
 To use this project simply clone the repository. Also you can make some changes in the code (cors options and addresses to fetch data), create your own Dockerfile and use this app in the Docker container. Remember to delete node_modules folder before (sorry, my bad). 
+ 
