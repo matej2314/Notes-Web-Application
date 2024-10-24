@@ -9,7 +9,7 @@ This was my second full stack project in node.js. I don't want to copy existing 
 ## Functionality of application
 This application allows users to make, save, delete and edit their own notes. Each user can register and store notes in their user profile. In addition app allows to save selected note to PDF file and set individual profile image. 
 
-## Tech stack 
+## My tech stack 
 
 ### Used technologies :
 
