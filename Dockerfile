@@ -10,5 +10,5 @@ RUN rm -rf node_modules && npm install
 
 EXPOSE 8088
 
-CMD [ "node", "app.js" ]
+CMD [ "node", "app.js" ] 
 
