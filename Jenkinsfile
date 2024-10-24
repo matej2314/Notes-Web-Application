@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image..."
-                    sh 'docker build -t testnoteapp:latest -f Dockerfile .'
+                    sh 'docker build -t testnote:latest -f Dockerfile .'
                     echo "Docker image build completed."
                 }
             }
