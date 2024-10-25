@@ -10,12 +10,18 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Build Docker Image') {
+            agent {
+                docker {
+                    image 'docker:latest' // Użyj odpowiedniego obrazu Dockera
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Dodaj dostęp do Docker Socket
+                }
+            }
             steps {
                 script {
                     echo "Building Docker image..."
-                    sh 'docker build -t notetest:latest -f Dockerfile .'
+                    sh 'docker build -t ${CONT_NAME}:latest -f Dockerfile .'
                     echo "Docker image build completed."
                 }
             }
