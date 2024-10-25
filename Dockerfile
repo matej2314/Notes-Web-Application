@@ -1,4 +1,4 @@
-eFROM node:20.18.0
+FROM node:20.18.0
 
 WORKDIR /app
 
@@ -10,5 +10,5 @@ RUN rm -rf node_modules && npm install
 
 EXPOSE 8088
 
-CMD [ "node", "app.js" ] 
+CMD [ "node", "server.js" ] 
 
