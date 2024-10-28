@@ -21,7 +21,7 @@ This application allows users to make, save, delete and edit their own notes. Ea
 ## Summary
 Making this project I felt more comfortable. I knew what I have to do, know the basic of Node.js and Express.js framework. Javascript also wasn't a problem. TailwindCSS was new to me, first minutes with this tool was difficult, but I think the project doesn't look too bad.
 Ok, it have a few bugs and imperfections, but I can already say that I am planning to rebuild this app. I am learning SCSS and REACT and I will use this technologies to make version 2 of Notes Web Application.
-  
+
 ## Installation
  
 To use this project simply clone the repository. Also you can make some changes in the code (cors options and addresses to fetch data), create your own Dockerfile and use this app in the Docker container. Remember to delete node_modules folder before (sorry, my bad). 
