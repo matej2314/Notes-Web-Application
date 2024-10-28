@@ -6,32 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const JWT_SECRET = process.env.JWT_SECRET;
-const sendEmail = require('../nodeMailer');
 const logger = require('../logger');
-const admin = require('firebase-admin');
-
-const admin = require('firebase-admin');
-
-
-const serviceAccount = require('../notes-web-app-baa92-firebase-adminsdk-7avxv-748e8376a7.json');
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-const verifyToken = async (req, res, next) => {
-  const token = req.body.token;
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    req.user = decodedToken;
-    next();
-  } catch (error) {
-    res.status(401).send('Unauthorized');
-  }
-};
-
-module.exports = verifyToken;
-
 
 const jwtCookieOptions = {
 	httpOnly: true,

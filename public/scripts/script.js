@@ -1,5 +1,4 @@
 'use strict';
-import { auth, provider, signInWithPopup } from './firebase';
 
 const btns = document.querySelectorAll('.btn');
 const btnLogin = document.getElementById('btn-login');
@@ -11,29 +10,6 @@ const passwdInput = document.getElementById('pass_input');
 const btnSubmit = document.getElementById('btn-submit');
 const mainSiteBtn = document.getElementById('mainSiteBtn');
 const allinputs = document.querySelectorAll('.input');
-
-const loginWithGoogle = async () => {
-	try {
-	  const result = await signInWithPopup(auth, provider);
-	  const user = result.user;
-	  console.log('Zalogowany użytkownik:', user);
-  
-	  // W razie potrzeby, wyślij token ID do backendu, aby uwierzytelnić sesję.
-	  const idToken = await user.getIdToken();
-	  await fetch('/api/login', {
-		method: 'POST',
-		headers: {
-		  'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({ token: idToken }),
-	  });
-	} catch (error) {
-	  console.error('Błąd logowania:', error);
-	}
-  };
-  
-  // Przypisz funkcję do przycisku logowania
-  document.getElementById('google-login-btn').addEventListener('click', loginWithGoogle);
 
 btnLogin.addEventListener('click', function () {
 	if (regWindow.classList.contains('visible')) {
